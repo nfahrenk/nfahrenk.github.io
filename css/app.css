@@ -1,0 +1,169 @@
+#main-nav {
+  width: 100%;  
+}
+#main-nav nav {
+  padding: 0px;  
+}
+#main-nav nav ul {
+  margin: 0px;
+  background-color: #13042b;
+}
+.nav-button {
+  float: right;
+  background: none;
+  width: 100px;
+}
+.nav-button:hover {
+  background-color: #480fa3;
+}
+.project {
+  padding: 50px 0px;
+}
+.webapp-nav {
+  height: 25px;
+}
+.webapp-embed {
+  background-color: #EEE;
+  border: 1px solid #C5C7C9;
+  border-radius: 15px;
+  padding: 5px 10px;
+}
+.webapp-bottom {
+  text-align: center;
+  padding: 5px 0px;
+}
+.fa-apple {
+  font-size: 45px;
+}
+.fa-times-circle {
+  color: #f85b42;
+  padding: 1px;
+}
+.fa-minus-circle {
+  color: #f7bd15;
+  padding: 1px;
+}
+.fa-plus-circle {
+  color: #21ce29;
+  padding: 1px;
+}
+.mobile-embed {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 15px;
+  border: 3px solid #C5C7C9;
+  background-color: #29314C;
+  border-radius: 25px;
+  color: white;
+  font-size: 35px;
+  text-align:center;
+  width: 260px;
+  height: 475px;
+}
+.homebutton {
+  padding: 3px;
+}
+#changing-interests {
+  font-size: 65px;
+  color: white;
+  font-family: 'Inconsolata', Arial;
+  text-align: center;
+}
+h2 {
+  font-size: 55px;
+}
+#changing-interests > span {
+  display: inline !important;
+}
+#crane-banner {
+  font-size: 95px;
+  color: white;
+}
+#main-crane {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 4em;
+  max-width: 100%;
+  /*height: 325px;*/
+}
+#resume {
+  background-color: white;
+  position: relative;
+  padding: 20px 0px;
+}
+.resume-row {
+  padding: 0% 5%;
+}
+#babelboard-1 {
+  height: 400px;
+  display: block;
+}
+hr {
+  border-bottom: 3px solid white;
+}
+body {
+  background-color: #13042b;
+  font-family: 'Inconsolata', Arial;
+  font-weight: 100;
+}
+#projects {
+  background-color: #6bd6f1;
+  min-height: 100%;
+  max-width: none;
+  padding: 15px 4%;
+}
+.description {
+  padding: 15px 25px;
+}
+.is-hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 2s linear;
+}
+#resume, p {
+  margin-bottom: 0px;
+}
+#download-resume {
+  margin-left: 10px;
+}
+.job-listing {
+  margin: 20px 0px;
+}
+#contact {
+  color: white;
+  margin-bottom: 65px;
+  text-align: center;
+}
+#contact img {
+  height: 300px;
+}
+.nopadding {
+  padding: 0px;
+}
+@media only screen and (min-width: 1025px) {
+    .rotate {
+      -ms-transform: rotate(-15deg); /* IE 9 */
+      -webkit-transform: rotate(-15deg); /* Chrome, Safari, Opera */
+      transform: rotate(-15deg);
+    }
+    .right-info {
+      text-align: right;
+    }
+}
+@media only screen and (max-width: 768px) {
+  .project {
+    /*border-bottom: 1px solid white;*/
+  }
+  .right-info {
+    font-style: italic;
+  }
+  .nav-button {
+    margin-lefta
+  }
+}

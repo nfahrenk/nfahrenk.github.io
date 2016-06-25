@@ -1,0 +1,10 @@
+body {
+    background-color: #13042b;
+    text-align: center;
+    font-family: Inconsolata;
+    color: white;
+}
+.video-js {
+    margin: 0 auto;
+    max-width: 100%;
+}
