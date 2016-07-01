@@ -9,13 +9,13 @@ var toggleChangingInterest = function() {
       selected.next().addClass("is-visible");
       selected.next().removeClass("is-hidden");
     } else {
-      $("#changing-interests span:first-child").addClass("is-visible");
-      $("#changing-interests span:first-child").removeClass("is-hidden");
+      $("#crane-banner img:first-child").addClass("is-visible");
+      $("#crane-banner img:first-child").removeClass("is-hidden");
     }
     toggleChangingInterest();
   }, 2000);
 };
 
 $(document).ready(function() {
-  
+  toggleChangingInterest();
 });

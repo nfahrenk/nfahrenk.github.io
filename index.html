@@ -18,30 +18,20 @@
   <body>
     <div class="row">
       <div class="large-12 columns" id="crane-banner">
-        <img src="images/crane.png" id="main-crane">
+        <img src="images/me_small.png" class="img-circle is-visible">
+        <img src="images/me_highschool.png" class="img-circle is-hidden">
+        <img src="images/me_junior.png" class="img-circle is-hidden">
       </div>
     </div>
-    <div class="row">
-      <!-- <h5 id="changing-interests">
-        I am Nick Fahrenkrog! I like
-        <span class="is-visible">programming.</span>
-        <span class="is-hidden">hackathons.</span>
-        <span class="is-hidden">python.</span>
-        <span class="is-hidden">puzzles.</span>
-      </h5> -->
+    <div class="row" id="about">
       <h5 id="changing-interests">Nick Fahrenkrog</h5>
+      <ul class="button-group" id="skillsets">
+        <li style="background-color: white">Web Development</li>
+        <li>Data Analysis</li>
+        <li>App Development</li>
+      </ul>
     </div>
     <!--
-    <div id="main-nav" class="contain-to-grid sticky">
-      <nav class="top-bar" data-topbar role="navigation" data-options="sticky_on: [large, medium]">
-        <ul class="button-group">
-          <li><a href="#contact" class="button nav-button">Contact</a></li>
-          <li><a href="#resume" class="button nav-button">Resume</a></li>
-          <li><a href="#projects" class="button nav-button">Projects</a></li>
-        </ul>
-      </nav>
-    </div>
-    -->
     <div class="off-canvas-wrap" data-offcanvas>
       <div class="inner-wrap">
         <a class="left-off-canvas-toggle" href="#" >Menu</a>
@@ -55,146 +45,13 @@
           </ul>
         </aside>
       </div>
-      <div id="projects">
-        <div class="row project">
-          <div class="large-6 medium-6 small-12 columns">
-            <div class="mobile-embed">
-              <img src="images/babelboard.jpg" id="babelboard-1">
-              <i class="fa fa-stop-circle-o homebutton" aria-hidden="true"></i>
-            </div>
-          </div>
-          <div class="large-6 medium-6 small-12 columns">
-            <h2>Babelboard</h2>
-            <h3>
-              <i class="fa fa-trophy" aria-hidden="true"></i> Won best iOS app by Apple at HackGT.
-            </h3>
-            <div class="row">
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>ABOUT</p>
-                <p>
-                  This keyboard allows you to perform simple calculations and translations from the keyboard.
-                </p>
-              </div>
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>TOOLS</p>
-                <p>
-                  Created in Swift the week that Swift was released to developers.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row project">
-          <div class="large-6 medium-6 small-12 columns">
-            <h2>Be Heard</h2>
-            <h3>
-              <i class="fa fa-trophy" aria-hidden="true"></i> Won 2nd most ambitious hack by AppCow at Bitcamp.
-            </h3>
-            <div class="row">
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>ABOUT</p>
-                <p>
-                  This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.
-                </p>
-              </div>
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>TOOLS</p>
-                <p>
-                  Created using Django and PostgreSQL on the back-end, Bourbon.io on the front-end.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="large-6 medium-6 small-12 columns">
-            <div class="webapp-embed">
-              <div class="webapp-nav">
-                <i class="fa fa-times-circle" aria-hidden="true"></i><i class="fa fa-minus-circle" aria-hidden="true"></i><i class="fa fa-plus-circle" aria-hidden="true"></i><br>
-              </div>
-              <img src="images/beheard.jpg" id="beheard-1">
-              <div class="webapp-bottom">
-                <i class="fa fa-apple" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row project">
-          <div class="large-6 medium-6 small-12 columns">
-            <div class="webapp-embed">
-              <div class="webapp-nav">
-                <i class="fa fa-times-circle" aria-hidden="true"></i><i class="fa fa-minus-circle" aria-hidden="true"></i><i class="fa fa-plus-circle" aria-hidden="true"></i><br>
-              </div>
-              <img src="images/flywithfriends.png" id="flywithfriends-1">
-              <div class="webapp-bottom">
-                <i class="fa fa-apple" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-          <div class="large-6 medium-6 small-12 columns">
-            <h2>Fly with Friends</h2>
-            <h3>
-              Entered into HackGT.
-            </h3>
-            <div class="row">
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>ABOUT</p>
-                <p>
-                  This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person you will be seated next to.
-                </p>
-              </div>
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>TOOLS</p>
-                <p>
-                  Created using Django and PostgreSQL on the back-end, and interacts with Facebook API, Wolfram Alpha API, and Sabre API for user, population, and seat layout information respectively. 
-                </p>
-              </div>
-            </div>
-          </div>        
-        </div>
-        <div class="row project">
-          <div class="large-6 medium-6 small-12 columns">
-            <h2>Matlab Shader</h2>
-            <h3>
-              Project for introductory Matlab course.
-            </h3>
-            <div class="row">
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>ABOUT</p>
-                <p>
-                  This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map.
-                </p>
-              </div>
-              <div class="large-6 medium-6 small-12 columns">
-                -<br>
-                <p>TOOLS</p>
-                <p>
-                  Created from scratch in Matlab.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="large-6 medium-6 small-12 columns">
-            <div class="webapp-embed">
-              <div class="webapp-nav">
-                <i class="fa fa-times-circle" aria-hidden="true"></i><i class="fa fa-minus-circle" aria-hidden="true"></i><i class="fa fa-plus-circle" aria-hidden="true"></i><br>
-              </div>
-              <img src="images/matlabshader.png" id="matlabshader-1">
-              <div class="webapp-bottom">
-                <i class="fa fa-apple" aria-hidden="true"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row project">
-          <h3>I have also participated in Bloomberg Code B, the Google Games, and other coding events. I like Hackathons...</h3>
-        </div>
+    -->
+      <div class="range-slider" data-slider>
+        <span class="range-slider-handle" role="slider" tabindex="0"></span>
+        <span class="range-slider-active-segment"></span>
+        <input type="hidden">
       </div>
+      <div id="project-listings"></div>
       <div id="resume">
         <div class="row">
           <a href="documents/resume.pdf" id="download-resume" download><i class="fa fa-download" aria-hidden="true"></i> Download Resume</a>
@@ -225,166 +82,21 @@
         </div>
         <div class="row resume-row">
           <h3>WORK EXPERIENCE</h3>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-8 small-12 columns">
-                <h5>Texas Instruments</h5>
-                <h5>Demand Creation Development Intern</h5>
-              </div>
-              <div class="large-4 small-12 columns right-info">
-                May 2016 ~ August 2016
-              </div>
-            </div>
-            <p>Used PL/SQL and Javascript to secure documents for upload/download and export with the correct confidential level</p>
-            <p>Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit</p>
-          </div>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-8 small-12 columns">
-                <h5>Stackfolio LLC</h5>
-                <h5>Full-stack Web Developer</h5>
-              </div>
-              <div class="large-4 small-12 columns right-info">
-                May 2015 ~ May 2016
-              </div>
-            </div>
-            <p>Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages</p>
-            <p>Integrated Docusign API to handle non-disclosure and transaction agreements on the platform</p>
-            <p>Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time</p>
-            <p>Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server</p>
-            <p>Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business side of being in a Startup</p>
-          </div>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-10 columns">
-                <div class="row">
-                  <div class="large-8 small-12 columns">
-                    <h5>White House Council on Environmental Quality</h5>
-                    <h5>Student Intern</h5>
-                  </div>
-                  <div class="large-4 small-12 columns right-info">
-                    January 2015 ~ May 2015
-                  </div>
-                </div>
-                <p>Performed data analysis in R that found that the original targets of Executive Order 13693 were not ambitious enough to meet its mission and helped rework the document to include more appropriate targets</p>
-                <p>Developed data forecasts used in presentations with federal agencies to support why the targets were selected</p>
-                <p>Automated the process of converting excel documents submitted by government agencies into that needed by OMB MAX Analytics</p>
-                <p>Orchestrated and engaged in meetings between managers of government agencies and myself</p>
-              </div>
-              <div class="large-2 columns">
-                <h6 class="rotate"><a href="https://www.whitehouse.gov/the-press-office/2015/03/19/executive-order-planning-federal-sustainability-next-decade" target="_blank">Check out the Executive Order!</a></h6>
-              </div>
-            </div>
-          </div>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-8 small-12 columns">
-                <h5>Georgia Institute of Technology CS 1371 (Matlab)</h5>
-                <h5>Teacher's Assistant</h5>
-              </div>
-              <div class="large-4 small-12 columns right-info">
-                January 2014 ~ December 2014
-              </div>
-            </div>
-            <p>Planned and taught undergraduate engineers a 90-minute recitation each week</p>
-            <p>Wrote, proctored, and graded students’ examinations</p>
-            <p>Held office hours to help students with homework and the material taught in class</p>
-          </div>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-8 small-12 columns">
-                <h5>Northfield Trading Company</h5>
-                <h5>Software Engineer</h5>
-              </div>
-              <div class="large-4 small-12 columns right-info">
-                February 2012 ~ August 2013
-              </div>
-            </div>
-            <p>Processed natural language baseball play-by-play information in Java and stored the results in a MySQL database</p>
-            <p>Used Java to predict the outcome of baseball games by setting up a monte carlo simulation weighted by a genetic algorithm to anticipate the progression of plays</p>
-            <p>Developed model in R using metrics from collaboration with a sabermetrician</p>
-          </div>
-          <div class="job-listing">
-            <div class="row">
-              <div class="large-8 small-12 columns">
-                <h5>Global Learning Center</h5>
-                <h5>Student Intern</h5>
-              </div>
-              <div class="large-4 small-12 columns right-info">
-                October 2014 ~ December 2014
-              </div>
-            </div>
-            <p>Used Powershell and Active Directory to automate connecting users to the nearest printer</p>
-          </div>
+          <div id="jobs"></div>
         </div>
         <div class="row resume-row">
           <h3>SKILLS</h3>
-          <div class="skill">
-            <h5>LANGUAGES</h5>
-            <p>English, Mandarin Chinese - Conversational</p>
-          </div>
-          <div class="skill">
-            <h5>PROGRAMMING LANGUAGES</h5>
-            <p>Python, PL/SQL, HTML, SASS/CSS, Javascript/JQuery, Java, C++, Matlab, R, Powershell, VHDL</p>
-          </div>
-          <div class="skill">
-            <h5>PROGRAMMING TECHNIQUES</h5>
-            <p>MPI Threads, PThreads, OpenGL</p>
-          </div>
-          <div class="skill">
-            <h5>FRONT-END WEB DEVELOPMENT</h5>
-            <p>Bourbon.io/Neat/Bitters, JQuery, Zurb Foundation, React.js, Ember.js</p>
-          </div>
-          <div class="skill">
-            <h5>BACK-END WEB DEVELOPMENT</h5>
-            <p>Django, Parse, MongoDB, SQL</p>
-          </div>        
-          <div class="skill">
-            <h5>DIGITAL SIGNAL PROCESSING</h5>
-            <p>Sampling and Aliasing, Discrete Time Signals and Systems, Fourier Transforms, Z-Transform, Digital Filters</p>
-          </div>
-          <div class="skill row">          
-            <div class="large-10 columns">
-              <h5>CLEANROOM EXPERIENCE</h5>
-              <p>Manufactured System-in-Package Substrate Using Photolithographic Processes</p>
-            </div>
-            <div class="large-2 columns">
-              <h6 class="rotate"><a href="documents/substrate.pdf" target="_blank">Check out the Process!</a></h6>
-            </div>
-          </div>
-          <div class="skill">
-            <h5>DIGITAL SYSTEMS</h5>
-            <p>Finite State Machines, Sequential and Combination Logic Circuits, Instruction Set Architectures, Microcode</p>
-          </div>
-          <div class="skill">
-            <h5>CIRCUIT DESIGN</h5>
-            <p>Oscillators, First & Second Order Filters, Half & Full Wave Rectifiers</p>
-          </div>
-          <div class="skill">
-            <h5>ELECTRICAL ENERGY SYSTEMS</h5>
-            <p>Renewable Energy Modeling (Hydroelectric, Solar, Wind), Energy Storage, Three Phase Rectifiers, Buck Converters</p>
-          </div>
-          <div class="skill">
-            <h5>SOFTWARE</h5>
-            <p>Excel (including VBA Macros), NI Labview, LaTeX, MAX Collect & Analyze, MathCad, LTSpice, NI Multisim</p>
-          </div>
-          <div class="skill">
-            <h5>INSTRUMENTATION</h5>
-            <p>NI myDAQ, ARM mbed, Oscilloscope, Soldering Iron</p>
-          </div>
+          <div id="skills"></div>
         </div>
       </div>
       <div id="contact">
         <div class="row">
           <h2>Contact</h2>
-          <img src="images/me.png">
-          <p>That's me! You can contact me via email by clicking <a href="mailto:ccrunner2013@gmail.com">this</a>.</p>
+          <p>Thank you for your time! You can contact me via email by clicking <a href="mailto:ccrunner2013@gmail.com">this</a>.</p>
         </div>
       </div>
-      <a class="exit-off-canvas"></a>
-
-    </div>    
-  
+    </div>
+    <script src="bundle.js"></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
