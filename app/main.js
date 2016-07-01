@@ -173,13 +173,13 @@ var SkillBlurb = React.createClass({
   render: function() {
     if (this.props.skill.extra !== undefined && this.props.skill.extra !== null) {
       return (
-        <div class="skill row">
-          <div class="large-10 columns">
+        <div className="skill row">
+          <div className="large-10 columns">
             <h5>{this.props.skill.title.toUpperCase()}</h5>
             <p>{this.props.skill.description}</p>
           </div>
-          <div class="large-2 columns">
-            <h6 class="rotate">
+          <div className="large-2 columns">
+            <h6 className="rotate">
               <a href={this.props.skill.extra.link} target="_blank">
                 {this.props.skill.extra.text}
               </a>
@@ -189,7 +189,7 @@ var SkillBlurb = React.createClass({
       );
     } else {
       return (
-        <div class="skill">
+        <div className="skill">
           <h5>{this.props.skill.title.toUpperCase()}</h5>
           <p>{this.props.skill.description}</p>
         </div>

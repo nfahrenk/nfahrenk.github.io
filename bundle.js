@@ -325,10 +325,10 @@
 	    if (this.props.skill.extra !== undefined && this.props.skill.extra !== null) {
 	      return React.createElement(
 	        'div',
-	        { 'class': 'skill row' },
+	        { className: 'skill row' },
 	        React.createElement(
 	          'div',
-	          { 'class': 'large-10 columns' },
+	          { className: 'large-10 columns' },
 	          React.createElement(
 	            'h5',
 	            null,
@@ -342,10 +342,10 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { 'class': 'large-2 columns' },
+	          { className: 'large-2 columns' },
 	          React.createElement(
 	            'h6',
-	            { 'class': 'rotate' },
+	            { className: 'rotate' },
 	            React.createElement(
 	              'a',
 	              { href: this.props.skill.extra.link, target: '_blank' },
@@ -357,7 +357,7 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        { 'class': 'skill' },
+	        { className: 'skill' },
 	        React.createElement(
 	          'h5',
 	          null,
