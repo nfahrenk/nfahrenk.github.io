@@ -116,7 +116,7 @@ var JobBlurb = React.createClass({
     });
     if (this.props.job.extra !== undefined && this.props.job.extra !== null) {
       return (
-        <div className="row">
+        <div className="row resume-row">
           <div className="large-10 columns">
             <div className="row">
               <div className="large-8 small-12 columns">
@@ -140,7 +140,7 @@ var JobBlurb = React.createClass({
       );
     } else {
       return (
-        <div className="job-listing">
+        <div className="job-listing resume-row">
           <div className="row">
             <div className="large-8 small-12 columns">
               <h5>{this.props.job.company}</h5>
@@ -405,10 +405,5 @@ ReactDOM.render(
 
 ReactDOM.render(
   <JobListings jobs={JOBS} />,
-  document.getElementById('jobs')
-);
-
-ReactDOM.render(
-  <SkillListings skills={SKILLS} />,
-  document.getElementById('skills')
+  document.getElementById('job-listings')
 );

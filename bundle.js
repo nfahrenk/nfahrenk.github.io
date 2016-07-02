@@ -220,7 +220,7 @@
 	    if (this.props.job.extra !== undefined && this.props.job.extra !== null) {
 	      return React.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row resume-row' },
 	        React.createElement(
 	          'div',
 	          { className: 'large-10 columns' },
@@ -268,7 +268,7 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        { className: 'job-listing' },
+	        { className: 'job-listing resume-row' },
 	        React.createElement(
 	          'div',
 	          { className: 'row' },
@@ -531,9 +531,7 @@
 
 	ReactDOM.render(React.createElement(ProjectListings, { projects: PROJECTS }), document.getElementById('project-listings'));
 
-	ReactDOM.render(React.createElement(JobListings, { jobs: JOBS }), document.getElementById('jobs'));
-
-	ReactDOM.render(React.createElement(SkillListings, { skills: SKILLS }), document.getElementById('skills'));
+	ReactDOM.render(React.createElement(JobListings, { jobs: JOBS }), document.getElementById('job-listings'));
 
 /***/ },
 /* 1 */

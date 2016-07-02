@@ -12,83 +12,76 @@
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/foundation.min.js"></script>
     <script src="js/app.js"></script>
-    <!-- <script src="js/foundation/foundation.offcanvas.js"></script> -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script>$(document).foundation();</script>
   </head>
   <body>
-    <div class="row">
+    <div class="row" id=header>
       <div class="large-12 columns" id="crane-banner">
-        <img src="images/me_small.png" class="img-circle is-visible">
-        <img src="images/me_highschool.png" class="img-circle is-hidden">
-        <img src="images/me_junior.png" class="img-circle is-hidden">
+        <img id="me_highschool" src="images/me_highschool.png" class="img-circle is-hidden">
+        <img id="me_freshman" src="images/me_freshman.png" class="img-circle is-hidden">
+        <img id="me_sophomore" src="images/me_sophomore.png" class="img-circle is-hidden">
+        <img id="me_junior" src="images/me_junior.png" class="img-circle is-visible">
       </div>
+      <h5 id="name">Nick Fahrenkrog</h5>
     </div>
     <div class="row" id="about">
-      <h5 id="changing-interests">Nick Fahrenkrog</h5>
-      <ul class="button-group" id="skillsets">
-        <li style="background-color: white">Web Development</li>
-        <li>Data Analysis</li>
-        <li>App Development</li>
-      </ul>
-    </div>
-    <!--
-    <div class="off-canvas-wrap" data-offcanvas>
-      <div class="inner-wrap">
-        <a class="left-off-canvas-toggle" href="#" >Menu</a>
-        <aside class="left-off-canvas-menu">
-          <ul>
-            <li id="aside-babelboard" class="aside-story">
-              <p>This was the first hackathon that I completed a project. A few months earlier, I had actually attempted my first hackathon; I planned an ambitious app involving Google Glass, but did not have any prior app experience so I ended up spending the whole time trying to learn without actually trying anything. That was a huge learning moment for me. At this hackathon, I still had no app development experience, but I decided to take a different approach: just start working.</p>
-              <p>Lack of app development experience was not the only obstacle in this project, my teammate and I decided to work on a Swift keyboard project during the same week that the new version of iOS that allowed developers to code in Swift and make custom keyboards was released. That meant there were not existing answers to our problems on StackOverflow, and there was only one guide on the internet to making a custom keyboard. With Swift being a new language, we ran into countless bumps, such as it not having a practical way to perform regular expressions.</p>
-              <p>But at like 5am, a few hours before submissions were due, it started to work! And then Apple announced </p>
-            </li>
-          </ul>
-        </aside>
+      <!-- <a href="documents/resume.pdf" id="download-resume" download><i class="fa fa-download" aria-hidden="true"></i> Download Resume</a> -->
+      <div class="large-6 medium-6 small-12 columns">
+        <h2>Hi, I Am...</h2>
+        <p>
+          A <span class="highlight">senior</span> at
+          <span class="highlight">Georgia Institute of Technology</span>
+          with a <span class="highlight">3.68 GPA</span>
+          and 1 of 150 people in my class's <span class="highlight">Honors Program</span>.
+          I am pursuing a <span class="highlight">B.S. Electrical Engineering</span>,
+          with a minor in Mandarin Chinese.
+          Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai,
+          and was 1 of 2 people selected to receive a stipend to intern
+          with the federal government in Washington DC.
+        </p>
       </div>
-    -->
-      <div class="range-slider" data-slider>
-        <span class="range-slider-handle" role="slider" tabindex="0"></span>
-        <span class="range-slider-active-segment"></span>
-        <input type="hidden">
-      </div>
-      <div id="project-listings"></div>
-      <div id="resume">
-        <div class="row">
-          <a href="documents/resume.pdf" id="download-resume" download><i class="fa fa-download" aria-hidden="true"></i> Download Resume</a>
-        </div>
-        <div class="row resume-row">
-          <h3>STIPENDS</h3>
-          <h5>DC Internship Program</h5>
-          <p>1 of 2 students selected by Georgia Institute of Technology to receive a stipend to intern in Washington DC in Spring 2015.</p>
-        </div>
-        <div class="row resume-row">
-          <h3>EDUCATION</h3>
-          <div class="row">
-            <div class="large-8 small-12 columns">
-              <h5>Georgia Institute of Technology</h5>
-              <h5>B.S. Electrical Engineering, Minor in Mandarin Chinese</h5>
+      <div class="large-6 medium-6 small-12 columns">
+        <div class="row filter-section">
+          <p>Timeline:</p>
+          <div id="timeline-filter">
+            <div class="large-2 medium-2 small-2 columns">
+              <!-- <input type="hidden" name="lower-timeline-input"></input> -->
+              <span id="lower-timeline">high school</span>
             </div>
-            <div class="large-4 small-12 columns right-info">
-              August 2013 ~ December 2017
+            <div class="large-8 medium-8 small-8 columns">
+              <div id="timeline-slider"></div>
+            </div>
+            <div class="large-2 medium-2 small-2 columns">
+              <!-- <input type="hidden" name="upper-timeline-input"></input> -->
+              <span id="upper-timeline" style="float: right">present</span>
             </div>
           </div>
-          <ul>
-            <li>GPA 3.68</li>
-            <li>Senior (108 Credit Hours)</li>
-            <li>Honors Program (1 of 150 Students Chosen)</li>
-            <li>Faculty Honors (Fall 2013), Dean’s List (Spring & Fall 2014, Fall 2015)</li>
-            <li>Studied Mandarin Chinese specific to business at Shanghai Jiao Tong University</li>
-          </ul>
         </div>
-        <div class="row resume-row">
-          <h3>WORK EXPERIENCE</h3>
-          <div id="jobs"></div>
+        <div class="row filter-section">
+          <p>Experience:</p>
+          <a href="#" class="button tag">Web Development</a>
+          <a href="#" class="button tag">App Development</a>
+          <a href="#" class="button tag">Data Science</a>
         </div>
-        <div class="row resume-row">
-          <h3>SKILLS</h3>
-          <div id="skills"></div>
+        <div class="row filter-section">
+          <p>Frameworks:</p>
+          <a href="#" class="button tag">Django</a>
+        </div>
+        <div class="row filter-section">
+          <p>Languages:</p>
+          <a href="#" class="button tag">Python</a>
+          <a href="#" class="button tag">Swift</a>
+          <a href="#" class="button tag">SQL</a>
+          <a href="#" class="button tag">R</a>
+          <a href="#" class="button tag">Java</a>
+          <a href="#" class="button tag">Matlab</a>
         </div>
       </div>
+    </div>
+      <div id="project-listings"></div>
+      <div id="job-listings"></div>
       <div id="contact">
         <div class="row">
           <h2>Contact</h2>
