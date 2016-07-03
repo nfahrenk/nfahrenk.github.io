@@ -32,7 +32,6 @@ var WebappScreenshot = React.createClass({
 
 var Screenshot = React.createClass({
   render: function() {
-    console.log(this.props.project.type);
     if (this.props.project.type === "mobile") {
       var content = <PhoneScreenshot img={this.props.project.img}/>;
     } else if (this.props.project.type === "webapp" || this.props.project.type === "desktopapp") {
@@ -54,7 +53,20 @@ var ProjectBlurb = React.createClass({
       <h3><i className="fa fa-trophy" aria-hidden="true"></i>
       &nbsp;{this.props.project.description}</h3> :
       <h3>{this.props.project.description}</h3>;
-
+    var frameworks = [];
+    this.props.project.frameworks.forEach(function(framework) {
+      frameworks.push(<span className="proj-tag" key={framework}>{framework}</span>);
+    }.bind(this));
+    var languages = [];
+    this.props.project.languages.forEach(function(language) {
+      languages.push(<span className="proj-tag" key={language}>{language}</span>);
+    }.bind(this));
+    var tools = frameworks.length > 0 ?
+      <div className="tagGroups">
+        <div className="project-frameworks"><p>FRAMEWORKS</p>{frameworks}</div>
+        <div className="project-languages"><p>LANGUAGES</p>{languages}</div>
+      </div> :
+      <div className="project-languages"><p>LANGUAGES</p>{languages}</div>;
     return (
       <div className="large-6 medium-6 small-12 columns">
         <h2>{this.props.project.name}</h2>
@@ -63,16 +75,11 @@ var ProjectBlurb = React.createClass({
           <div className="large-6 medium-6 small-12 columns">
             -<br/>
             <p>ABOUT</p>
-            <p>
-              {this.props.project.about}
-            </p>
+            <p>{this.props.project.about}</p>
           </div>
           <div className="large-6 medium-6 small-12 columns">
             -<br/>
-            <p>TOOLS</p>
-            <p>
-              {this.props.project.tools}
-            </p>
+            {tools}
           </div>
         </div>
       </div>
@@ -81,27 +88,48 @@ var ProjectBlurb = React.createClass({
 });
 
 var ProjectListings = React.createClass({
+  timeLookup: {
+    "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
+    "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
+    "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
+    "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
+  },
+  shouldDisplay: function(project) {
+    if (project.startDate < this.timeLookup[this.props.lowertime][0]
+      || project.endDate > this.timeLookup[this.props.uppertime][1]) {
+
+      return false;
+    }
+    // Check if it has any of the skill types
+    var hasFound = false;
+    project.experiences.concat(
+      project.frameworks).concat(
+        project.languages).forEach(function(elem) {
+          if (this.props[elem]) { hasFound = true; }
+        }.bind(this));
+    return hasFound;
+  },
   render: function() {
     var rows = [];
     var ndx = 0;
     this.props.projects.forEach(function(project) {
       if (ndx % 2 == 0) {
         rows.push(
-          <div className="row project" key={project.img.id}>
+          <div className={this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
             <ProjectBlurb project={project} />
             <Screenshot project={project} />
           </div>
         );
       } else {
         rows.push(
-          <div className="row project" key={project.img.id}>
+          <div className={this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
             <Screenshot project={project} />
             <ProjectBlurb project={project} />
           </div>
         );
       }
       ndx++;
-    });
+    }.bind(this));
     return (<div id="projects">{rows}</div>);
   }
 });
@@ -113,7 +141,7 @@ var JobBlurb = React.createClass({
     this.props.job.accomplishments.forEach(function(sentence) {
       rows.push(<p key={counter}>{sentence}</p>);
       counter++;
-    });
+    }.bind(this));
     if (this.props.job.extra !== undefined && this.props.job.extra !== null) {
       return (
         <div className="row resume-row">
@@ -164,106 +192,252 @@ var JobListings = React.createClass({
     this.props.jobs.forEach(function(job) {
       rows.push(<JobBlurb job={job} key={counter}/>);
       counter++;
-    });
+    }.bind(this));
     return (<div id="jobs">{rows}</div>);
   }
 });
 
-var SkillBlurb = React.createClass({
+
+var TimelineFilter = React.createClass({
+  handleChange: function(event) {
+    this.props.changeTime(
+      this.refs.ltime.innerText,
+      this.refs.utime.innerText
+    );
+  },
   render: function() {
-    if (this.props.skill.extra !== undefined && this.props.skill.extra !== null) {
-      return (
-        <div className="skill row">
-          <div className="large-10 columns">
-            <h5>{this.props.skill.title.toUpperCase()}</h5>
-            <p>{this.props.skill.description}</p>
+    return (
+      <div className="row filter-section">
+        <p>Timeline:</p>
+        <div id="timeline-filter">
+          <div className="large-2 medium-2 small-2 columns">
+            <span id="lower-timeline" ref="ltime">high school</span>
           </div>
-          <div className="large-2 columns">
-            <h6 className="rotate">
-              <a href={this.props.skill.extra.link} target="_blank">
-                {this.props.skill.extra.text}
-              </a>
-            </h6>
+          <div className="large-8 medium-8 small-8 columns" onBlur={this.handleChange}>
+            <div id="timeline-slider"></div>
+          </div>
+          <div className="large-2 medium-2 small-2 columns">
+            <span id="upper-timeline" ref="utime">present</span>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div className="skill">
-          <h5>{this.props.skill.title.toUpperCase()}</h5>
-          <p>{this.props.skill.description}</p>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 });
 
 var SkillListings = React.createClass({
+  handleChange: function(event) {
+    var stateProperty = event.target.id;
+    this.props.toggleTag(
+      stateProperty,
+      !this.refs[stateProperty].checked
+    );
+  },
   render: function() {
-    var rows = [];
-    var counter = 0;
-    this.props.skills.forEach(function(skill) {
-      rows.push(<SkillBlurb skill={skill} key={counter}/>);
-      counter++;
-    });
-    return (<div id="skills">{rows}</div>);
+    var tagLinks = {experiences: [], languages: [], frameworks: []};
+    var tagInputs = {experiences: [], languages: [], frameworks: []};
+    this.props.skills.experiences.forEach(function(exp) {
+      tagLinks.experiences.push(
+        <a href="javascript:void(0)"
+          className={this.props[exp.id] ? "tag checked" : "tag"}
+          id={exp.id}
+          key={"expa"+exp.id}
+          onClick={this.handleChange}>
+          {exp.name}
+        </a>
+      );
+      tagInputs.experiences.push(
+        <input
+          type="checkbox" className="is-hidden"
+          ref={exp.id}
+          key={"expi"+exp.id}
+          checked={this.props[exp.id]}
+        />
+      );
+    }.bind(this));
+    this.props.skills.frameworks.forEach(function(exp) {
+      tagLinks.frameworks.push(
+        <a href="javascript:void(0)"
+          className={this.props[exp.id] ? "tag checked" : "tag"}
+          id={exp.id}
+          key={"frma"+exp.id}
+          onClick={this.handleChange}>
+          {exp.name}
+        </a>
+      );
+      tagInputs.frameworks.push(
+        <input
+          type="checkbox" className="is-hidden"
+          ref={exp.id}
+          key={"frmi"+exp.id}
+          checked={this.props[exp.id]}
+        />
+      );
+    }.bind(this));
+    this.props.skills.languages.forEach(function(exp) {
+      tagLinks.languages.push(
+        <a href="javascript:void(0)"
+          className={this.props[exp.id] ? "tag checked" : "tag"}
+          id={exp.id}
+          key={"langa"+exp.id}
+          onClick={this.handleChange}>
+          {exp.name}
+        </a>
+      );
+      tagInputs.languages.push(
+        <input
+          type="checkbox" className="is-hidden"
+          ref={exp.id}
+          key={"langi"+exp.id}
+          checked={this.props[exp.id]}
+        />
+      );
+    }.bind(this));
+    return (
+      <div id="filters" className="large-6 medium-6 small-12 columns">
+        <TimelineFilter
+          changeTime={this.props.changeTime}
+          lowertime={this.props.lowertime}
+          uppertime={this.props.uppertime}
+        />
+        <div className="row filter-section">
+          <p>Experience:</p>
+          {tagLinks.experiences}
+          {tagInputs.experiences}
+        </div>
+        <div className="row filter-section">
+          <p>Frameworks:</p>
+          {tagLinks.frameworks}
+          {tagInputs.frameworks}
+        </div>
+        <div className="row filter-section">
+          <p>Languages:</p>
+          {tagLinks.languages}
+          {tagInputs.languages}
+        </div>
+      </div>
+    );
   }
 });
 
-var SKILLS = [
-  {
-    title: "languages",
-    description: "English, Mandarin Chinese - Conversational"
+var MainContent = React.createClass({
+  getInitialState: function() {
+    var out = {
+      "lowertime": "high school",
+      "uppertime": "present"
+    };
+    this.props.skills.experiences.forEach(function(elem) {
+      out[elem.id] = true;
+    }.bind(this));
+    this.props.skills.frameworks.concat(
+      this.props.skills.languages).forEach(function(elem) {
+        out[elem.id] = false;
+      }.bind(this));
+    return out;
   },
-  {
-    title: "programming languages",
-    description: "Python, PL/SQL, HTML, SASS/CSS, Javascript/JQuery, Java, C++, Matlab, R, Powershell, VHDL"
+  toggleTag: function(tagName, tagValue) {
+    this.setState(function(previousState, currentProps) {
+      var out = {};
+      out[tagName] = tagValue;
+      return out;
+    }.bind(this));
   },
-  {
-    title: "programming techniques",
-    description: "MPI Threads, PThreads, OpenGL"
+  changeTime: function(ltime, utime) {
+    this.setState({"lowertime": ltime});
+    this.setState({"uppertime": utime});
   },
-  {
-    title: "front-end web development",
-    description: "Bourbon.io/Neat/Bitters, JQuery, Zurb Foundation, React.js, Ember.js"
-  },
-  {
-    title: "back-end web development",
-    description: "Django, Parse, MongoDB, SQL"
-  },
-  {
-    title: "digital signal processing",
-    description: "Sampling and Aliasing, Discrete Time Signals and Systems, Fourier Transforms, Z-Transform, Digital Filters"
-  },
-  {
-    title: "cleanroom experience",
-    description: "Manufactured System-in-Package Substrate Using Photolithographic Processes",
-    extra: {
-      link: "documents/substrate.pdf",
-      text: "Check out the Process!"
-    }
-  },
-  {
-    title: "digital systems",
-    description: "Finite State Machines, Sequential and Combination Logic Circuits, Instruction Set Architectures, Microcode"
-  },
-  {
-    title: "circuit design",
-    description: "Oscillators, First & Second Order Filters, Half & Full Wave Rectifiers"
-  },
-  {
-    title: "electrical energy systems",
-    description: "Renewable Energy Modeling (Hydroelectric, Solar, Wind), Energy Storage, Three Phase Rectifiers, Buck Converters"
-  },
-  {
-    title: "software",
-    description: "Excel (including VBA Macros), NI Labview, LaTeX, MAX Collect & Analyze, MathCad, LTSpice, NI Multisim"
-  },
-  {
-    title: "instrumentation",
-    description: "NI myDAQ, ARM mbed, Oscilloscope, Soldering Iron"
+  render: function() {
+    return (
+      <div id="filterable-content">
+        <div className="row" id="about">
+          <div className="large-6 medium-6 small-12 columns">
+            <h2>Hi, I Am...</h2>
+            <p>
+              A <span className="highlight">senior</span> at &nbsp;
+              <span className="highlight">Georgia Institute of Technology</span>
+              &nbsp;with a <span className="highlight">3.68 GPA</span>
+              &nbsp;and 1 of 150 people in the <span className="highlight">Honors Program</span>.
+              I am pursuing a bachelors degree in <span className="highlight">Electrical Engineering</span>,
+              with a minor in Mandarin Chinese.
+              Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai,
+              and was 1 of 2 people selected to receive a stipend to intern
+              with the federal government in Washington DC.
+            </p>
+            <a href="documents/resume.pdf" id="download-resume" download>
+              <i className="fa fa-download" aria-hidden="true"></i> Download Resume
+            </a>
+          </div>
+          <SkillListings skills={this.props.skills} webdev={this.state.webdev}
+            appdev={this.state.appdev} datascience={this.state.datascience}
+            django={this.state.django} python={this.state.python} swift={this.state.swift}
+            sql={this.state.sql} nosql={this.state.nosql} rlang={this.state.rlang}
+            java={this.state.java} matlab={this.state.matlab}
+            lowertime={this.state.lowertime} uppertime={this.state.uppertime}
+            toggleTag={this.toggleTag} changeTime={this.changeTime}/>
+        </div>
+        <ProjectListings projects={this.props.projects} webdev={this.state.webdev}
+          appdev={this.state.appdev} datascience={this.state.datascience}
+          django={this.state.django} python={this.state.python} swift={this.state.swift}
+          sql={this.state.sql} nosql={this.state.nosql} rlang={this.state.rlang}
+          java={this.state.java} matlab={this.state.matlab}
+          lowertime={this.state.lowertime} uppertime={this.state.uppertime} />
+      </div>
+    );
   }
-];
+});
+
+var SKILLS = {
+  experiences: [
+    {
+      name: "Web Development",
+      id: "webdev"
+    },
+    {
+      name: "App Development",
+      id: "appdev"
+    },
+    {
+      name: "Data Science",
+      id: "datascience"
+    }
+  ],
+  frameworks: [
+    {
+      name: "Django",
+      id: "django"
+    }
+  ],
+  languages: [
+    {
+      name: "Python",
+      id: "python"
+    },
+    {
+      name: "Swift",
+      id: "swift"
+    },
+    {
+      name: "SQL",
+      id: "sql"
+    },
+    {
+      name: "NoSQL",
+      id: "nosql"
+    },
+    {
+      name: "R",
+      id: "rlang"
+    },
+    {
+      name: "Java",
+      id: "java"
+    },
+    {
+      name: "Matlab",
+      id: "matlab"
+    }
+  ]
+}
 
 var JOBS = [
   {
@@ -345,6 +519,9 @@ var PROJECTS = [
     startDate: new Date("September 19, 2014"),
     endDate: new Date("September 21, 2014"),
     type: "mobile",
+    experiences: ["appdev"],
+    frameworks: [],
+    languages: ["swift"],
     wonAward: true,
     description: "Won best iOS app by Apple at HackGT.",
     img: {
@@ -352,13 +529,15 @@ var PROJECTS = [
       src: "images/babelboard.jpg"
     },
     about: "This keyboard allows you to perform simple calculations and translations from the keyboard.",
-    tools: "Created in Swift the week that Swift was released to developers."
   },
   {
     name: "Be Heard",
     startDate: new Date("April 10, 2015"),
     endDate: new Date("April 12, 2015"),
     type: "webapp",
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "nosql"],
     wonAward: true,
     description: "Won 2nd most ambitious hack by AppCow at Bitcamp.",
     img: {
@@ -366,13 +545,15 @@ var PROJECTS = [
       src: "images/beheard.jpg"
     },
     about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.",
-    tools: "Created using Django and PostgreSQL on the back-end, Bourbon.io on the front-end."
   },
   {
     name: "Fly with Friends",
     startDate: new Date("September 25, 2015"),
     endDate: new Date("September 27, 2015"),
     type: "webapp",
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "sql"],
     wonAward: false,
     description: "Entered into HackGT.",
     img: {
@@ -380,13 +561,15 @@ var PROJECTS = [
       src: "images/flywithfriends.png"
     },
     about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you.",
-    tools: "Created using Django and PostgreSQL on the back-end, and interacts with Facebook API, Wolfram Alpha API, and Sabre API for user, population, and seat layout information respectively."
   },
   {
     name: "Matlab Shader",
     startDate: new Date("November 20, 2013"),
     endDate: new Date("December 05, 2013"),
     type: "desktopapp",
+    experiences: ["appdev"],
+    frameworks: [],
+    languages: ["matlab"],
     wonAward: false,
     description: "Project for introductory Matlab course.",
     img: {
@@ -394,16 +577,10 @@ var PROJECTS = [
       src: "images/matlabshader.png"
     },
     about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map.",
-    tools: "Created from scratch in Matlab."
   }
 ]
 
 ReactDOM.render(
-  <ProjectListings projects={PROJECTS} />,
-  document.getElementById('project-listings')
-);
-
-ReactDOM.render(
-  <JobListings jobs={JOBS} />,
-  document.getElementById('job-listings')
+  <MainContent skills={SKILLS} projects={PROJECTS} jobs={JOBS} />,
+  document.getElementById('filterable-content')
 );

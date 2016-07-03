@@ -90,7 +90,6 @@
 	  displayName: 'Screenshot',
 
 	  render: function render() {
-	    console.log(this.props.project.type);
 	    if (this.props.project.type === "mobile") {
 	      var content = React.createElement(PhoneScreenshot, { img: this.props.project.img });
 	    } else if (this.props.project.type === "webapp" || this.props.project.type === "desktopapp") {
@@ -121,7 +120,55 @@
 	      null,
 	      this.props.project.description
 	    );
-
+	    var frameworks = [];
+	    this.props.project.frameworks.forEach(function (framework) {
+	      frameworks.push(React.createElement(
+	        'span',
+	        { className: 'proj-tag', key: framework },
+	        framework
+	      ));
+	    }.bind(this));
+	    var languages = [];
+	    this.props.project.languages.forEach(function (language) {
+	      languages.push(React.createElement(
+	        'span',
+	        { className: 'proj-tag', key: language },
+	        language
+	      ));
+	    }.bind(this));
+	    var tools = frameworks.length > 0 ? React.createElement(
+	      'div',
+	      { className: 'tagGroups' },
+	      React.createElement(
+	        'div',
+	        { className: 'project-frameworks' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'FRAMEWORKS'
+	        ),
+	        frameworks
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'project-languages' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'LANGUAGES'
+	        ),
+	        languages
+	      )
+	    ) : React.createElement(
+	      'div',
+	      { className: 'project-languages' },
+	      React.createElement(
+	        'p',
+	        null,
+	        'LANGUAGES'
+	      ),
+	      languages
+	    );
 	    return React.createElement(
 	      'div',
 	      { className: 'large-6 medium-6 small-12 columns' },
@@ -155,16 +202,7 @@
 	          { className: 'large-6 medium-6 small-12 columns' },
 	          '-',
 	          React.createElement('br', null),
-	          React.createElement(
-	            'p',
-	            null,
-	            'TOOLS'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            this.props.project.tools
-	          )
+	          tools
 	        )
 	      )
 	    );
@@ -174,6 +212,25 @@
 	var ProjectListings = React.createClass({
 	  displayName: 'ProjectListings',
 
+	  timeLookup: {
+	    "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
+	    "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
+	    "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
+	    "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
+	  },
+	  shouldDisplay: function shouldDisplay(project) {
+	    if (project.startDate < this.timeLookup[this.props.lowertime][0] || project.endDate > this.timeLookup[this.props.uppertime][1]) {
+	      return false;
+	    }
+	    // Check if it has any of the skill types
+	    var hasFound = false;
+	    project.experiences.concat(project.frameworks).concat(project.languages).forEach(function (elem) {
+	      if (this.props[elem]) {
+	        hasFound = true;
+	      }
+	    }.bind(this));
+	    return hasFound;
+	  },
 	  render: function render() {
 	    var rows = [];
 	    var ndx = 0;
@@ -181,20 +238,20 @@
 	      if (ndx % 2 == 0) {
 	        rows.push(React.createElement(
 	          'div',
-	          { className: 'row project', key: project.img.id },
+	          { className: this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
 	          React.createElement(ProjectBlurb, { project: project }),
 	          React.createElement(Screenshot, { project: project })
 	        ));
 	      } else {
 	        rows.push(React.createElement(
 	          'div',
-	          { className: 'row project', key: project.img.id },
+	          { className: this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
 	          React.createElement(Screenshot, { project: project }),
 	          React.createElement(ProjectBlurb, { project: project })
 	        ));
 	      }
 	      ndx++;
-	    });
+	    }.bind(this));
 	    return React.createElement(
 	      'div',
 	      { id: 'projects' },
@@ -216,7 +273,7 @@
 	        sentence
 	      ));
 	      counter++;
-	    });
+	    }.bind(this));
 	    if (this.props.job.extra !== undefined && this.props.job.extra !== null) {
 	      return React.createElement(
 	        'div',
@@ -309,7 +366,7 @@
 	    this.props.jobs.forEach(function (job) {
 	      rows.push(React.createElement(JobBlurb, { job: job, key: counter }));
 	      counter++;
-	    });
+	    }.bind(this));
 	    return React.createElement(
 	      'div',
 	      { id: 'jobs' },
@@ -318,120 +375,298 @@
 	  }
 	});
 
-	var SkillBlurb = React.createClass({
-	  displayName: 'SkillBlurb',
+	var TimelineFilter = React.createClass({
+	  displayName: 'TimelineFilter',
 
+	  handleChange: function handleChange(event) {
+	    this.props.changeTime(this.refs.ltime.innerText, this.refs.utime.innerText);
+	  },
 	  render: function render() {
-	    if (this.props.skill.extra !== undefined && this.props.skill.extra !== null) {
-	      return React.createElement(
+	    return React.createElement(
+	      'div',
+	      { className: 'row filter-section' },
+	      React.createElement(
+	        'p',
+	        null,
+	        'Timeline:'
+	      ),
+	      React.createElement(
 	        'div',
-	        { className: 'skill row' },
+	        { id: 'timeline-filter' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-10 columns' },
+	          { className: 'large-2 medium-2 small-2 columns' },
 	          React.createElement(
-	            'h5',
-	            null,
-	            this.props.skill.title.toUpperCase()
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            this.props.skill.description
+	            'span',
+	            { id: 'lower-timeline', ref: 'ltime' },
+	            'high school'
 	          )
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'large-2 columns' },
-	          React.createElement(
-	            'h6',
-	            { className: 'rotate' },
-	            React.createElement(
-	              'a',
-	              { href: this.props.skill.extra.link, target: '_blank' },
-	              this.props.skill.extra.text
-	            )
-	          )
-	        )
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        { className: 'skill' },
-	        React.createElement(
-	          'h5',
-	          null,
-	          this.props.skill.title.toUpperCase()
+	          { className: 'large-8 medium-8 small-8 columns', onBlur: this.handleChange },
+	          React.createElement('div', { id: 'timeline-slider' })
 	        ),
 	        React.createElement(
-	          'p',
-	          null,
-	          this.props.skill.description
+	          'div',
+	          { className: 'large-2 medium-2 small-2 columns' },
+	          React.createElement(
+	            'span',
+	            { id: 'upper-timeline', ref: 'utime' },
+	            'present'
+	          )
 	        )
-	      );
-	    }
+	      )
+	    );
 	  }
 	});
 
 	var SkillListings = React.createClass({
 	  displayName: 'SkillListings',
 
+	  handleChange: function handleChange(event) {
+	    var stateProperty = event.target.id;
+	    this.props.toggleTag(stateProperty, !this.refs[stateProperty].checked);
+	  },
 	  render: function render() {
-	    var rows = [];
-	    var counter = 0;
-	    this.props.skills.forEach(function (skill) {
-	      rows.push(React.createElement(SkillBlurb, { skill: skill, key: counter }));
-	      counter++;
-	    });
+	    var tagLinks = { experiences: [], languages: [], frameworks: [] };
+	    var tagInputs = { experiences: [], languages: [], frameworks: [] };
+	    this.props.skills.experiences.forEach(function (exp) {
+	      tagLinks.experiences.push(React.createElement(
+	        'a',
+	        { href: 'javascript:void(0)',
+	          className: this.props[exp.id] ? "tag checked" : "tag",
+	          id: exp.id,
+	          key: "expa" + exp.id,
+	          onClick: this.handleChange },
+	        exp.name
+	      ));
+	      tagInputs.experiences.push(React.createElement('input', {
+	        type: 'checkbox', className: 'is-hidden',
+	        ref: exp.id,
+	        key: "expi" + exp.id,
+	        checked: this.props[exp.id]
+	      }));
+	    }.bind(this));
+	    this.props.skills.frameworks.forEach(function (exp) {
+	      tagLinks.frameworks.push(React.createElement(
+	        'a',
+	        { href: 'javascript:void(0)',
+	          className: this.props[exp.id] ? "tag checked" : "tag",
+	          id: exp.id,
+	          key: "frma" + exp.id,
+	          onClick: this.handleChange },
+	        exp.name
+	      ));
+	      tagInputs.frameworks.push(React.createElement('input', {
+	        type: 'checkbox', className: 'is-hidden',
+	        ref: exp.id,
+	        key: "frmi" + exp.id,
+	        checked: this.props[exp.id]
+	      }));
+	    }.bind(this));
+	    this.props.skills.languages.forEach(function (exp) {
+	      tagLinks.languages.push(React.createElement(
+	        'a',
+	        { href: 'javascript:void(0)',
+	          className: this.props[exp.id] ? "tag checked" : "tag",
+	          id: exp.id,
+	          key: "langa" + exp.id,
+	          onClick: this.handleChange },
+	        exp.name
+	      ));
+	      tagInputs.languages.push(React.createElement('input', {
+	        type: 'checkbox', className: 'is-hidden',
+	        ref: exp.id,
+	        key: "langi" + exp.id,
+	        checked: this.props[exp.id]
+	      }));
+	    }.bind(this));
 	    return React.createElement(
 	      'div',
-	      { id: 'skills' },
-	      rows
+	      { id: 'filters', className: 'large-6 medium-6 small-12 columns' },
+	      React.createElement(TimelineFilter, {
+	        changeTime: this.props.changeTime,
+	        lowertime: this.props.lowertime,
+	        uppertime: this.props.uppertime
+	      }),
+	      React.createElement(
+	        'div',
+	        { className: 'row filter-section' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Experience:'
+	        ),
+	        tagLinks.experiences,
+	        tagInputs.experiences
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row filter-section' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Frameworks:'
+	        ),
+	        tagLinks.frameworks,
+	        tagInputs.frameworks
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row filter-section' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Languages:'
+	        ),
+	        tagLinks.languages,
+	        tagInputs.languages
+	      )
 	    );
 	  }
 	});
 
-	var SKILLS = [{
-	  title: "languages",
-	  description: "English, Mandarin Chinese - Conversational"
-	}, {
-	  title: "programming languages",
-	  description: "Python, PL/SQL, HTML, SASS/CSS, Javascript/JQuery, Java, C++, Matlab, R, Powershell, VHDL"
-	}, {
-	  title: "programming techniques",
-	  description: "MPI Threads, PThreads, OpenGL"
-	}, {
-	  title: "front-end web development",
-	  description: "Bourbon.io/Neat/Bitters, JQuery, Zurb Foundation, React.js, Ember.js"
-	}, {
-	  title: "back-end web development",
-	  description: "Django, Parse, MongoDB, SQL"
-	}, {
-	  title: "digital signal processing",
-	  description: "Sampling and Aliasing, Discrete Time Signals and Systems, Fourier Transforms, Z-Transform, Digital Filters"
-	}, {
-	  title: "cleanroom experience",
-	  description: "Manufactured System-in-Package Substrate Using Photolithographic Processes",
-	  extra: {
-	    link: "documents/substrate.pdf",
-	    text: "Check out the Process!"
+	var MainContent = React.createClass({
+	  displayName: 'MainContent',
+
+	  getInitialState: function getInitialState() {
+	    var out = {
+	      "lowertime": "high school",
+	      "uppertime": "present"
+	    };
+	    this.props.skills.experiences.forEach(function (elem) {
+	      out[elem.id] = true;
+	    }.bind(this));
+	    this.props.skills.frameworks.concat(this.props.skills.languages).forEach(function (elem) {
+	      out[elem.id] = false;
+	    }.bind(this));
+	    return out;
+	  },
+	  toggleTag: function toggleTag(tagName, tagValue) {
+	    this.setState(function (previousState, currentProps) {
+	      var out = {};
+	      out[tagName] = tagValue;
+	      return out;
+	    }.bind(this));
+	  },
+	  changeTime: function changeTime(ltime, utime) {
+	    this.setState({ "lowertime": ltime });
+	    this.setState({ "uppertime": utime });
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { id: 'filterable-content' },
+	      React.createElement(
+	        'div',
+	        { className: 'row', id: 'about' },
+	        React.createElement(
+	          'div',
+	          { className: 'large-6 medium-6 small-12 columns' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'Hi, I Am...'
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'A ',
+	            React.createElement(
+	              'span',
+	              { className: 'highlight' },
+	              'senior'
+	            ),
+	            ' at  ',
+	            React.createElement(
+	              'span',
+	              { className: 'highlight' },
+	              'Georgia Institute of Technology'
+	            ),
+	            ' with a ',
+	            React.createElement(
+	              'span',
+	              { className: 'highlight' },
+	              '3.68 GPA'
+	            ),
+	            ' and 1 of 150 people in the ',
+	            React.createElement(
+	              'span',
+	              { className: 'highlight' },
+	              'Honors Program'
+	            ),
+	            '. I am pursuing a bachelors degree in ',
+	            React.createElement(
+	              'span',
+	              { className: 'highlight' },
+	              'Electrical Engineering'
+	            ),
+	            ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC.'
+	          ),
+	          React.createElement(
+	            'a',
+	            { href: 'documents/resume.pdf', id: 'download-resume', download: true },
+	            React.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' }),
+	            ' Download Resume'
+	          )
+	        ),
+	        React.createElement(SkillListings, { skills: this.props.skills, webdev: this.state.webdev,
+	          appdev: this.state.appdev, datascience: this.state.datascience,
+	          django: this.state.django, python: this.state.python, swift: this.state.swift,
+	          sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
+	          java: this.state.java, matlab: this.state.matlab,
+	          lowertime: this.state.lowertime, uppertime: this.state.uppertime,
+	          toggleTag: this.toggleTag, changeTime: this.changeTime })
+	      ),
+	      React.createElement(ProjectListings, { projects: this.props.projects, webdev: this.state.webdev,
+	        appdev: this.state.appdev, datascience: this.state.datascience,
+	        django: this.state.django, python: this.state.python, swift: this.state.swift,
+	        sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
+	        java: this.state.java, matlab: this.state.matlab,
+	        lowertime: this.state.lowertime, uppertime: this.state.uppertime })
+	    );
 	  }
-	}, {
-	  title: "digital systems",
-	  description: "Finite State Machines, Sequential and Combination Logic Circuits, Instruction Set Architectures, Microcode"
-	}, {
-	  title: "circuit design",
-	  description: "Oscillators, First & Second Order Filters, Half & Full Wave Rectifiers"
-	}, {
-	  title: "electrical energy systems",
-	  description: "Renewable Energy Modeling (Hydroelectric, Solar, Wind), Energy Storage, Three Phase Rectifiers, Buck Converters"
-	}, {
-	  title: "software",
-	  description: "Excel (including VBA Macros), NI Labview, LaTeX, MAX Collect & Analyze, MathCad, LTSpice, NI Multisim"
-	}, {
-	  title: "instrumentation",
-	  description: "NI myDAQ, ARM mbed, Oscilloscope, Soldering Iron"
-	}];
+	});
+
+	var SKILLS = {
+	  experiences: [{
+	    name: "Web Development",
+	    id: "webdev"
+	  }, {
+	    name: "App Development",
+	    id: "appdev"
+	  }, {
+	    name: "Data Science",
+	    id: "datascience"
+	  }],
+	  frameworks: [{
+	    name: "Django",
+	    id: "django"
+	  }],
+	  languages: [{
+	    name: "Python",
+	    id: "python"
+	  }, {
+	    name: "Swift",
+	    id: "swift"
+	  }, {
+	    name: "SQL",
+	    id: "sql"
+	  }, {
+	    name: "NoSQL",
+	    id: "nosql"
+	  }, {
+	    name: "R",
+	    id: "rlang"
+	  }, {
+	    name: "Java",
+	    id: "java"
+	  }, {
+	    name: "Matlab",
+	    id: "matlab"
+	  }]
+	};
 
 	var JOBS = [{
 	  company: "Texas Instruments",
@@ -480,58 +715,64 @@
 	  startDate: new Date("September 19, 2014"),
 	  endDate: new Date("September 21, 2014"),
 	  type: "mobile",
+	  experiences: ["appdev"],
+	  frameworks: [],
+	  languages: ["swift"],
 	  wonAward: true,
 	  description: "Won best iOS app by Apple at HackGT.",
 	  img: {
 	    id: "babelboard-1",
 	    src: "images/babelboard.jpg"
 	  },
-	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard.",
-	  tools: "Created in Swift the week that Swift was released to developers."
+	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard."
 	}, {
 	  name: "Be Heard",
 	  startDate: new Date("April 10, 2015"),
 	  endDate: new Date("April 12, 2015"),
 	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "nosql"],
 	  wonAward: true,
 	  description: "Won 2nd most ambitious hack by AppCow at Bitcamp.",
 	  img: {
 	    id: "beheard-1",
 	    src: "images/beheard.jpg"
 	  },
-	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.",
-	  tools: "Created using Django and PostgreSQL on the back-end, Bourbon.io on the front-end."
+	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum."
 	}, {
 	  name: "Fly with Friends",
 	  startDate: new Date("September 25, 2015"),
 	  endDate: new Date("September 27, 2015"),
 	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "sql"],
 	  wonAward: false,
 	  description: "Entered into HackGT.",
 	  img: {
 	    id: "flywithfriends-1",
 	    src: "images/flywithfriends.png"
 	  },
-	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you.",
-	  tools: "Created using Django and PostgreSQL on the back-end, and interacts with Facebook API, Wolfram Alpha API, and Sabre API for user, population, and seat layout information respectively."
+	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you."
 	}, {
 	  name: "Matlab Shader",
 	  startDate: new Date("November 20, 2013"),
 	  endDate: new Date("December 05, 2013"),
 	  type: "desktopapp",
+	  experiences: ["appdev"],
+	  frameworks: [],
+	  languages: ["matlab"],
 	  wonAward: false,
 	  description: "Project for introductory Matlab course.",
 	  img: {
 	    id: "matlabshader-1",
 	    src: "images/matlabshader.png"
 	  },
-	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map.",
-	  tools: "Created from scratch in Matlab."
+	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map."
 	}];
 
-	ReactDOM.render(React.createElement(ProjectListings, { projects: PROJECTS }), document.getElementById('project-listings'));
-
-	ReactDOM.render(React.createElement(JobListings, { jobs: JOBS }), document.getElementById('job-listings'));
+	ReactDOM.render(React.createElement(MainContent, { skills: SKILLS, projects: PROJECTS, jobs: JOBS }), document.getElementById('filterable-content'));
 
 /***/ },
 /* 1 */

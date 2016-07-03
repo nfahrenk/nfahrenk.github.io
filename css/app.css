@@ -1,3 +1,19 @@
+#upper-timeline {
+  float: right;
+}
+.tag:active {
+  background-color: inherit;
+}
+.proj-tag {
+  color: #0A0A0A;
+  background-color: inherit;
+  border: 1px solid #0A0A0A;
+  margin: 0 5px 5px 0;
+  background-color: inherit;
+  padding: .85em 1.15em;
+  text-align: center;
+  display: inline-block;
+}
 
 #timeline-filter {
   height: 50px;
@@ -28,14 +44,17 @@
 .tag {
   background-color: inherit;
   border: 1px solid #C5C7C9;
-  margin: 0 0 5px 0;
+  margin: 0 5px 5px 0;
+  padding: .85em 1.15em;
+  color: #FEFEFE;
+  text-align: center;
+  display: inline-block;
 }
 .tag:hover {
-  background-color: inherit;
   text-decoration: underline;
 }
-.tag:hover {
-  background-color: inherit;
+
+.checked {
   text-decoration: underline;
 }
 
@@ -83,7 +102,8 @@
   background-color: #480fa3; }
 
 .project {
-  padding: 50px 0px; }
+  padding: 50px 0px;
+}
 
 .webapp-nav {
   height: 25px; }
@@ -188,11 +208,9 @@ body {
   opacity: 1;
   transition: opacity 2s linear; }
 
-#resume, p {
-  margin-bottom: 0px; }
-
 #download-resume {
-  margin-left: 10px; }
+  color: #FEFEFE;
+}
 
 .job-listing {
   margin: 20px 0px; }
@@ -220,9 +238,10 @@ body {
     text-align: right; } }
 @media only screen and (max-width: 768px) {
   .project {
-    /*border-bottom: 1px solid white;*/ }
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-top: 5px;
+  }
 
   .right-info {
     font-style: italic; } }
-
-/*# sourceMappingURL=app.css.map */

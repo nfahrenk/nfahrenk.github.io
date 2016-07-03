@@ -17,7 +17,7 @@
     <script>$(document).foundation();</script>
   </head>
   <body>
-    <div class="row" id=header>
+    <div class="row" id="header">
       <div class="large-12 columns" id="crane-banner">
         <img id="me_highschool" src="images/me_highschool.png" class="img-circle is-hidden">
         <img id="me_freshman" src="images/me_freshman.png" class="img-circle is-hidden">
@@ -26,67 +26,11 @@
       </div>
       <h5 id="name">Nick Fahrenkrog</h5>
     </div>
-    <div class="row" id="about">
-      <!-- <a href="documents/resume.pdf" id="download-resume" download><i class="fa fa-download" aria-hidden="true"></i> Download Resume</a> -->
-      <div class="large-6 medium-6 small-12 columns">
-        <h2>Hi, I Am...</h2>
-        <p>
-          A <span class="highlight">senior</span> at
-          <span class="highlight">Georgia Institute of Technology</span>
-          with a <span class="highlight">3.68 GPA</span>
-          and 1 of 150 people in my class's <span class="highlight">Honors Program</span>.
-          I am pursuing a <span class="highlight">B.S. Electrical Engineering</span>,
-          with a minor in Mandarin Chinese.
-          Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai,
-          and was 1 of 2 people selected to receive a stipend to intern
-          with the federal government in Washington DC.
-        </p>
-      </div>
-      <div class="large-6 medium-6 small-12 columns">
-        <div class="row filter-section">
-          <p>Timeline:</p>
-          <div id="timeline-filter">
-            <div class="large-2 medium-2 small-2 columns">
-              <!-- <input type="hidden" name="lower-timeline-input"></input> -->
-              <span id="lower-timeline">high school</span>
-            </div>
-            <div class="large-8 medium-8 small-8 columns">
-              <div id="timeline-slider"></div>
-            </div>
-            <div class="large-2 medium-2 small-2 columns">
-              <!-- <input type="hidden" name="upper-timeline-input"></input> -->
-              <span id="upper-timeline" style="float: right">present</span>
-            </div>
-          </div>
-        </div>
-        <div class="row filter-section">
-          <p>Experience:</p>
-          <a href="#" class="button tag">Web Development</a>
-          <a href="#" class="button tag">App Development</a>
-          <a href="#" class="button tag">Data Science</a>
-        </div>
-        <div class="row filter-section">
-          <p>Frameworks:</p>
-          <a href="#" class="button tag">Django</a>
-        </div>
-        <div class="row filter-section">
-          <p>Languages:</p>
-          <a href="#" class="button tag">Python</a>
-          <a href="#" class="button tag">Swift</a>
-          <a href="#" class="button tag">SQL</a>
-          <a href="#" class="button tag">R</a>
-          <a href="#" class="button tag">Java</a>
-          <a href="#" class="button tag">Matlab</a>
-        </div>
-      </div>
-    </div>
-      <div id="project-listings"></div>
-      <div id="job-listings"></div>
-      <div id="contact">
-        <div class="row">
-          <h2>Contact</h2>
-          <p>Thank you for your time! You can contact me via email by clicking <a href="mailto:ccrunner2013@gmail.com">this</a>.</p>
-        </div>
+    <div id="filterable-content"></div>
+    <div id="contact">
+      <div class="row">
+        <h2>Contact</h2>
+        <p>Thank you for your time! You can contact me via email by clicking <a href="mailto:ccrunner2013@gmail.com">this</a>.</p>
       </div>
     </div>
     <script src="bundle.js"></script>

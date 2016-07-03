@@ -6,17 +6,16 @@ $(document).ready(function() {
     2: "freshman",
     3: "sophomore",
     4: "present"
-  }
+  };
   var picLookup = {
     "high school": "me_highschool",
     "freshman": "me_freshman",
     "sophomore": "me_sophomore",
     "present": "me_junior"
-  }
+  };
   var newPicture = function(byId) {
-    console.log("Change");
     var visible = $("#crane-banner img.is-visible");
-    var newlyVisible = picLookup[$("#"+byId).text()];
+    var newlyVisible = picLookup[document.getElementById(byId).innerText];
     if (newlyVisible !== visible.id) {
       visible.removeClass("is-visible");
       visible.addClass("is-hidden");
@@ -39,12 +38,14 @@ $(document).ready(function() {
       step:1,
       values:previous,
       slide: function(event, ui) {
-        $("#lower-timeline").text(lookup[ui.values[0]]);
-        $("#upper-timeline").text(lookup[ui.values[1]]);
+        document.getElementById("lower-timeline").innerText = lookup[ui.values[0]];
+        document.getElementById("upper-timeline").innerText = lookup[ui.values[1]];
         if (previous[0] !== ui.values[0]) {
           $("#lower-timeline").trigger("change");
+          $("#lower-timeline").trigger("blur");
         } else if (previous[1] !== ui.values[1]) {
           $("#upper-timeline").trigger("change");
+          $("#upper-timeline").trigger("blur");
         }
         previous[0] = ui.values[0];
         previous[1] = ui.values[1];
