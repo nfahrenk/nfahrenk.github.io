@@ -1,3 +1,9 @@
+.job {
+  padding: 25px 0px;
+}
+.job > p {
+  margin-bottom: 0em;
+}
 #upper-timeline {
   float: right;
 }
@@ -52,6 +58,7 @@
 }
 .tag:hover {
   text-decoration: underline;
+  background-color: inherit;
 }
 
 .checked {
@@ -102,7 +109,7 @@
   background-color: #480fa3; }
 
 .project {
-  padding: 50px 0px;
+  padding: 25px 0px;
 }
 
 .webapp-nav {
@@ -112,7 +119,11 @@
   background-color: #EEE;
   border: 1px solid #C5C7C9;
   border-radius: 15px;
-  padding: 5px 10px; }
+  padding: 5px 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .webapp-bottom {
   text-align: center;
@@ -150,7 +161,7 @@
   padding: 3px; }
 
 #name {
-  font-size: 65px;
+  font-size: 55px;
   color: white;
   font-family: 'Inconsolata', Arial;
   text-align: center; }
@@ -173,10 +184,8 @@ h2 {
 #jobs {
   background-color: white;
   position: relative;
-  padding: 20px 0px; }
-
-.resume-row {
-  padding: 0% 5%; }
+  padding: 0px 4%;
+}
 
 #babelboard-1 {
   height: 400px;
@@ -193,7 +202,7 @@ body {
 #projects {
   background-color: #6bd6f1;
   max-width: none;
-  padding: 15px 4%; }
+  padding: 0px 4%; }
 
 .description {
   padding: 15px 25px; }
@@ -201,19 +210,16 @@ body {
 .is-hidden {
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 2s, opacity 2s linear; }
+  transition: visibility 0s 1s, opacity 2s linear; }
 
 .is-visible {
   visibility: visible;
   opacity: 1;
-  transition: opacity 2s linear; }
+  transition: opacity 1s linear; }
 
 #download-resume {
   color: #FEFEFE;
 }
-
-.job-listing {
-  margin: 20px 0px; }
 
 #contact {
   color: white;
@@ -226,7 +232,7 @@ body {
 .nopadding {
   padding: 0px; }
 
-@media only screen and (min-width: 1025px) {
+@media only screen and (min-width: 1024px) {
   .rotate {
     -ms-transform: rotate(-15deg);
     /* IE 9 */
@@ -237,11 +243,23 @@ body {
   .right-info {
     text-align: right; } }
 @media only screen and (max-width: 768px) {
-  .project {
-    border: 1px solid white;
-    border-radius: 10px;
-    margin-top: 5px;
+  #lower-timeline, #upper-timeline {
+    font-size: 80%;
   }
-
+  .tag, .proj-tag {
+    padding: .65em 1em;
+    font-size: 80%;
+  }
+  .webapp-nav {
+    height: 15px;
+    font-size: 10px;
+  }
+  .fa-apple {
+    font-size: 25px;
+  }
   .right-info {
-    font-style: italic; } }
+    font-style: italic; }
+  .bio {
+    display: none;
+  }
+}

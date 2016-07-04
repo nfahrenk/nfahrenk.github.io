@@ -49,6 +49,195 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
 
+	var SKILLS = {
+	  experiences: [{
+	    name: "Web Development",
+	    id: "webdev"
+	  }, {
+	    name: "App Development",
+	    id: "appdev"
+	  }, {
+	    name: "Data Science",
+	    id: "datascience"
+	  }],
+	  frameworks: [{
+	    name: "Django",
+	    id: "django"
+	  }],
+	  languages: [{
+	    name: "Python",
+	    id: "python"
+	  }, {
+	    name: "Swift",
+	    id: "swift"
+	  }, {
+	    name: "SQL",
+	    id: "sql"
+	  }, {
+	    name: "NoSQL",
+	    id: "nosql"
+	  }, {
+	    name: "R",
+	    id: "rlang"
+	  }, {
+	    name: "Java",
+	    id: "java"
+	  }, {
+	    name: "Matlab",
+	    id: "matlab"
+	  }]
+	};
+
+	var JOBS = [{
+	  company: "Texas Instruments",
+	  startDate: new Date("May 31, 2016"),
+	  endDate: new Date("August 12, 2016"),
+	  experiences: ["webdev"],
+	  frameworks: [],
+	  languages: ["java", "sql"],
+	  position: "Demand Creation Development Intern",
+	  accomplishments: ["Secured documents for upload/download and export with the correct confidential level", "Worked on development of internal sales tool for project portfolio management", "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"]
+	}, {
+	  company: "Stackfolio LLC",
+	  startDate: new Date("May 16, 2015"),
+	  endDate: new Date("May 29, 2016"),
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "nosql"],
+	  position: "Full-stack Web Developer",
+	  accomplishments: ["Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages", "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform", "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time", "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server", "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business side of being in a startup"]
+	}, {
+	  company: "White House Council on Environmental Quality",
+	  startDate: new Date("January 12, 2015"),
+	  endDate: new Date("May 01, 2015"),
+	  experiences: ["datascience"],
+	  frameworks: [],
+	  languages: ["rlang"],
+	  position: "Data Analyst Intern",
+	  accomplishments: ["Performed data analysis in R that found that the original targets of Executive Order 13693 were not ambitious enough to meet its mission and helped rework the document to include more appropriate targets", "Developed data forecasts used in presentations with federal agencies to support why the targets were selected", "Automated the process of converting excel documents submitted by government agencies into that needed by OMB MAX Analytics", "Orchestrated and engaged in meetings between managers of government agencies and myself"],
+	  extra: {
+	    text: "Check out the Executive Order!",
+	    link: "https://www.whitehouse.gov/the-press-office/2015/03/19/executive-order-planning-federal-sustainability-next-decade"
+	  }
+	}, {
+	  company: "Georgia Institute of Technology",
+	  startDate: new Date("January 06, 2014"),
+	  endDate: new Date("December 12, 2014"),
+	  experiences: [],
+	  frameworks: [],
+	  languages: ["matlab"],
+	  position: "CS 1371 (Matlab) Teacher's Assistant",
+	  accomplishments: ["Planned and taught undergraduate engineers a 90-minute recitation each week", "Wrote, proctored, and graded students’ examinations", "Held office hours to help students with homework and the material taught in class"]
+	}, {
+	  company: "Northfield Trading Company",
+	  startDate: new Date("February 06, 2012"),
+	  endDate: new Date("August 09, 2013"),
+	  experiences: ["datascience"],
+	  frameworks: [],
+	  languages: ["java", "rlang", "sql"],
+	  position: "Software Engineer",
+	  accomplishments: ["Processed natural language baseball play-by-play information in Java and stored the results in a MySQL database", "Used Java to predict the outcome of baseball games by setting up a monte carlo simulation weighted by a genetic algorithm to anticipate the progression of plays", "Developed model in R using metrics from collaboration with a sabermetrician"]
+	}];
+
+	var PROJECTS = [{
+	  name: "Babelboard",
+	  startDate: new Date("September 19, 2014"),
+	  endDate: new Date("September 21, 2014"),
+	  type: "mobile",
+	  experiences: ["appdev"],
+	  frameworks: [],
+	  languages: ["swift"],
+	  wonAward: true,
+	  description: "Won best iOS app by Apple at HackGT.",
+	  img: {
+	    id: "babelboard-1",
+	    src: "images/babelboard.jpg"
+	  },
+	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard."
+	}, {
+	  name: "Be Heard",
+	  startDate: new Date("April 10, 2015"),
+	  endDate: new Date("April 12, 2015"),
+	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "sql"],
+	  wonAward: true,
+	  description: "Won 2nd most ambitious hack by AppCow at Bitcamp.",
+	  img: {
+	    id: "beheard-1",
+	    src: "images/beheard.jpg"
+	  },
+	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum."
+	}, {
+	  name: "Fly with Friends",
+	  startDate: new Date("September 25, 2015"),
+	  endDate: new Date("September 27, 2015"),
+	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "sql"],
+	  wonAward: false,
+	  description: "Entered into HackGT.",
+	  img: {
+	    id: "flywithfriends-1",
+	    src: "images/flywithfriends.png"
+	  },
+	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you."
+	}, {
+	  name: "Matlab Shader",
+	  startDate: new Date("November 20, 2013"),
+	  endDate: new Date("December 05, 2013"),
+	  type: "desktopapp",
+	  experiences: ["appdev"],
+	  frameworks: [],
+	  languages: ["matlab"],
+	  wonAward: false,
+	  description: "Project for introductory Matlab course.",
+	  img: {
+	    id: "matlabshader-1",
+	    src: "images/matlabshader.png"
+	  },
+	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map."
+	}];
+
+	var skillIdToName = function skillIdToName(key, id) {
+	  var name;
+	  SKILLS[key].forEach(function (skill) {
+	    if (skill.id === id) {
+	      name = skill.name;
+	    }
+	  });
+	  return name;
+	};
+
+	var getFormattedDate = function getFormattedDate(d) {
+	  var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	  return monthNames[d.getMonth()] + " " + d.getFullYear();
+	};
+
+	var timeLookup = {
+	  "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
+	  "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
+	  "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
+	  "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
+	};
+
+	var shouldDisplay = function shouldDisplay(proj, props) {
+	  if (proj.startDate < timeLookup[props.lowertime][0] || proj.endDate > timeLookup[props.uppertime][1]) {
+
+	    return false;
+	  }
+	  // Check if it has any of the skill types
+	  var hasFound = false;
+	  proj.experiences.concat(proj.frameworks).concat(proj.languages).forEach(function (elem) {
+	    if (props[elem]) {
+	      hasFound = true;
+	    }
+	  }.bind(this));
+	  return hasFound;
+	};
+
 	var PhoneScreenshot = React.createClass({
 	  displayName: 'PhoneScreenshot',
 
@@ -99,7 +288,7 @@
 	    }
 	    return React.createElement(
 	      'div',
-	      { className: 'large-6 medium-6 small-12 columns' },
+	      { className: 'large-6 medium-12 small-12 columns' },
 	      content
 	    );
 	  }
@@ -109,6 +298,7 @@
 	  displayName: 'ProjectBlurb',
 
 	  render: function render() {
+	    // If project won an award
 	    var subtitle = this.props.project.wonAward ? React.createElement(
 	      'h3',
 	      null,
@@ -120,22 +310,28 @@
 	      null,
 	      this.props.project.description
 	    );
+
+	    // Generate frameworks used tags
 	    var frameworks = [];
 	    this.props.project.frameworks.forEach(function (framework) {
 	      frameworks.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: framework },
-	        framework
+	        skillIdToName("frameworks", framework)
 	      ));
 	    }.bind(this));
+
+	    // Generate languages used tags
 	    var languages = [];
 	    this.props.project.languages.forEach(function (language) {
 	      languages.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: language },
-	        language
+	        skillIdToName("languages", language)
 	      ));
 	    }.bind(this));
+
+	    // Only display frameworks if given
 	    var tools = frameworks.length > 0 ? React.createElement(
 	      'div',
 	      { className: 'tagGroups' },
@@ -169,9 +365,11 @@
 	      ),
 	      languages
 	    );
+
+	    // Render the project
 	    return React.createElement(
 	      'div',
-	      { className: 'large-6 medium-6 small-12 columns' },
+	      { className: 'large-6 medium-12 small-12 columns' },
 	      React.createElement(
 	        'h2',
 	        null,
@@ -212,45 +410,16 @@
 	var ProjectListings = React.createClass({
 	  displayName: 'ProjectListings',
 
-	  timeLookup: {
-	    "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
-	    "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
-	    "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
-	    "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
-	  },
-	  shouldDisplay: function shouldDisplay(project) {
-	    if (project.startDate < this.timeLookup[this.props.lowertime][0] || project.endDate > this.timeLookup[this.props.uppertime][1]) {
-	      return false;
-	    }
-	    // Check if it has any of the skill types
-	    var hasFound = false;
-	    project.experiences.concat(project.frameworks).concat(project.languages).forEach(function (elem) {
-	      if (this.props[elem]) {
-	        hasFound = true;
-	      }
-	    }.bind(this));
-	    return hasFound;
-	  },
 	  render: function render() {
 	    var rows = [];
 	    var ndx = 0;
 	    this.props.projects.forEach(function (project) {
-	      if (ndx % 2 == 0) {
-	        rows.push(React.createElement(
-	          'div',
-	          { className: this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
-	          React.createElement(ProjectBlurb, { project: project }),
-	          React.createElement(Screenshot, { project: project })
-	        ));
-	      } else {
-	        rows.push(React.createElement(
-	          'div',
-	          { className: this.shouldDisplay(project) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
-	          React.createElement(Screenshot, { project: project }),
-	          React.createElement(ProjectBlurb, { project: project })
-	        ));
-	      }
-	      ndx++;
+	      rows.push(React.createElement(
+	        'div',
+	        { className: shouldDisplay(project, this.props) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
+	        React.createElement(ProjectBlurb, { project: project }),
+	        React.createElement(Screenshot, { project: project })
+	      ));
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
@@ -264,6 +433,27 @@
 	  displayName: 'JobBlurb',
 
 	  render: function render() {
+	    // Generate frameworks used tags
+	    var frameworks = [];
+	    this.props.job.frameworks.forEach(function (framework) {
+	      frameworks.push(React.createElement(
+	        'span',
+	        { className: 'proj-tag', key: framework },
+	        skillIdToName("frameworks", framework)
+	      ));
+	    }.bind(this));
+
+	    // Generate languages used tags
+	    var languages = [];
+	    this.props.job.languages.forEach(function (language) {
+	      languages.push(React.createElement(
+	        'span',
+	        { className: 'proj-tag', key: language },
+	        skillIdToName("languages", language)
+	      ));
+	    }.bind(this));
+
+	    // Generate paragraphs of accomplishments
 	    var rows = [];
 	    var counter = 0;
 	    this.props.job.accomplishments.forEach(function (sentence) {
@@ -274,86 +464,74 @@
 	      ));
 	      counter++;
 	    }.bind(this));
-	    if (this.props.job.extra !== undefined && this.props.job.extra !== null) {
-	      return React.createElement(
+	    var tags = frameworks.length > 0 ? React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
 	        'div',
-	        { className: 'row resume-row' },
+	        { className: 'large-6 medium-6 small-12 columns' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'LANGUAGES'
+	        ),
+	        languages
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'large-6 medium-6 small-12 columns' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'FRAMEWORKS'
+	        ),
+	        frameworks
+	      )
+	    ) : React.createElement(
+	      'div',
+	      { className: 'row' },
+	      React.createElement(
+	        'div',
+	        { className: 'large-12 medium-12 small-12 columns' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'LANGUAGES'
+	        ),
+	        languages
+	      )
+	    );
+	    return React.createElement(
+	      'div',
+	      { className: this.props.isVisible ? "row job is-visible" : "row job is-hidden" },
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-10 columns' },
+	          { className: 'large-8 small-12 columns' },
 	          React.createElement(
-	            'div',
-	            { className: 'row' },
-	            React.createElement(
-	              'div',
-	              { className: 'large-8 small-12 columns' },
-	              React.createElement(
-	                'h5',
-	                null,
-	                this.props.job.company
-	              ),
-	              React.createElement(
-	                'h5',
-	                null,
-	                this.props.job.position
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'large-4 small-12 columns right-info' },
-	              this.props.job.startDate.toString(),
-	              ' ~ ',
-	              this.props.job.endDate.toString()
-	            )
+	            'h3',
+	            null,
+	            this.props.job.company
 	          ),
-	          rows
+	          React.createElement(
+	            'h4',
+	            null,
+	            this.props.job.position
+	          )
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'large-2 columns' },
-	          React.createElement(
-	            'h6',
-	            { className: 'rotate' },
-	            React.createElement(
-	              'a',
-	              { href: this.props.job.extra.link, target: '_blank' },
-	              this.props.job.extra.text
-	            )
-	          )
+	          { className: 'large-4 small-12 columns right-info' },
+	          getFormattedDate(this.props.job.startDate),
+	          ' ~ ',
+	          getFormattedDate(this.props.job.endDate)
 	        )
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        { className: 'job-listing resume-row' },
-	        React.createElement(
-	          'div',
-	          { className: 'row' },
-	          React.createElement(
-	            'div',
-	            { className: 'large-8 small-12 columns' },
-	            React.createElement(
-	              'h5',
-	              null,
-	              this.props.job.company
-	            ),
-	            React.createElement(
-	              'h5',
-	              null,
-	              this.props.job.position
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'large-4 small-12 columns right-info' },
-	            this.props.job.startDate.toString(),
-	            ' ~ ',
-	            this.props.job.endDate.toString()
-	          )
-	        ),
-	        rows
-	      );
-	    }
+	      ),
+	      rows,
+	      tags
+	    );
 	  }
 	});
 
@@ -364,7 +542,7 @@
 	    var rows = [];
 	    var counter = 0;
 	    this.props.jobs.forEach(function (job) {
-	      rows.push(React.createElement(JobBlurb, { job: job, key: counter }));
+	      rows.push(React.createElement(JobBlurb, { job: job, isVisible: shouldDisplay(job, this.props), key: counter }));
 	      counter++;
 	    }.bind(this));
 	    return React.createElement(
@@ -563,7 +741,7 @@
 	        { className: 'row', id: 'about' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-6 medium-6 small-12 columns' },
+	          { className: 'large-6 medium-6 small-12 columns bio' },
 	          React.createElement(
 	            'h2',
 	            null,
@@ -624,153 +802,16 @@
 	        django: this.state.django, python: this.state.python, swift: this.state.swift,
 	        sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
 	        java: this.state.java, matlab: this.state.matlab,
+	        lowertime: this.state.lowertime, uppertime: this.state.uppertime }),
+	      React.createElement(JobListings, { jobs: this.props.jobs, webdev: this.state.webdev,
+	        appdev: this.state.appdev, datascience: this.state.datascience,
+	        django: this.state.django, python: this.state.python, swift: this.state.swift,
+	        sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
+	        java: this.state.java, matlab: this.state.matlab,
 	        lowertime: this.state.lowertime, uppertime: this.state.uppertime })
 	    );
 	  }
 	});
-
-	var SKILLS = {
-	  experiences: [{
-	    name: "Web Development",
-	    id: "webdev"
-	  }, {
-	    name: "App Development",
-	    id: "appdev"
-	  }, {
-	    name: "Data Science",
-	    id: "datascience"
-	  }],
-	  frameworks: [{
-	    name: "Django",
-	    id: "django"
-	  }],
-	  languages: [{
-	    name: "Python",
-	    id: "python"
-	  }, {
-	    name: "Swift",
-	    id: "swift"
-	  }, {
-	    name: "SQL",
-	    id: "sql"
-	  }, {
-	    name: "NoSQL",
-	    id: "nosql"
-	  }, {
-	    name: "R",
-	    id: "rlang"
-	  }, {
-	    name: "Java",
-	    id: "java"
-	  }, {
-	    name: "Matlab",
-	    id: "matlab"
-	  }]
-	};
-
-	var JOBS = [{
-	  company: "Texas Instruments",
-	  startDate: new Date("May 31, 2016"),
-	  endDate: new Date("August 12, 2016"),
-	  position: "Demand Creation Development Intern",
-	  accomplishments: ["Used PL/SQL and Javascript to secure documents for upload/download and export with the correct confidential level", "Worked on development of internal sales tool for project portfolio management", "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"]
-	}, {
-	  company: "Stackfolio LLC",
-	  startDate: new Date("May 16, 2015"),
-	  endDate: new Date("May 29, 2016"),
-	  position: "Full-stack Web Developer",
-	  accomplishments: ["Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages", "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform", "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time", "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server", "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business side of being in a startup"]
-	}, {
-	  company: "White House Council on Environmental Quality",
-	  startDate: new Date("January 12, 2015"),
-	  endDate: new Date("May 01, 2015"),
-	  position: "Data Analyst Intern",
-	  accomplishments: ["Performed data analysis in R that found that the original targets of Executive Order 13693 were not ambitious enough to meet its mission and helped rework the document to include more appropriate targets", "Developed data forecasts used in presentations with federal agencies to support why the targets were selected", "Automated the process of converting excel documents submitted by government agencies into that needed by OMB MAX Analytics", "Orchestrated and engaged in meetings between managers of government agencies and myself"],
-	  extra: {
-	    text: "Check out the Executive Order!",
-	    link: "https://www.whitehouse.gov/the-press-office/2015/03/19/executive-order-planning-federal-sustainability-next-decade"
-	  }
-	}, {
-	  company: "Georgia Institute of Technology",
-	  startDate: new Date("January 06, 2014"),
-	  endDate: new Date("December 12, 2014"),
-	  position: "CS 1371 (Matlab) Teacher's Assistant",
-	  accomplishments: ["Planned and taught undergraduate engineers a 90-minute recitation each week", "Wrote, proctored, and graded students’ examinations", "Held office hours to help students with homework and the material taught in class"]
-	}, {
-	  company: "Northfield Trading Company",
-	  startDate: new Date("February 06, 2012"),
-	  endDate: new Date("August 09, 2013"),
-	  position: "Software Engineer",
-	  accomplishments: ["Processed natural language baseball play-by-play information in Java and stored the results in a MySQL database", "Used Java to predict the outcome of baseball games by setting up a monte carlo simulation weighted by a genetic algorithm to anticipate the progression of plays", "Developed model in R using metrics from collaboration with a sabermetrician"]
-	}, {
-	  company: "Global Learning Center",
-	  startDate: new Date("October 22, 2014"),
-	  endDate: new Date("December 12, 2014"),
-	  position: "IT Intern",
-	  accomplishments: ["Used Powershell and Active Directory to automate connecting users to the nearest printer"]
-	}];
-
-	var PROJECTS = [{
-	  name: "Babelboard",
-	  startDate: new Date("September 19, 2014"),
-	  endDate: new Date("September 21, 2014"),
-	  type: "mobile",
-	  experiences: ["appdev"],
-	  frameworks: [],
-	  languages: ["swift"],
-	  wonAward: true,
-	  description: "Won best iOS app by Apple at HackGT.",
-	  img: {
-	    id: "babelboard-1",
-	    src: "images/babelboard.jpg"
-	  },
-	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard."
-	}, {
-	  name: "Be Heard",
-	  startDate: new Date("April 10, 2015"),
-	  endDate: new Date("April 12, 2015"),
-	  type: "webapp",
-	  experiences: ["webdev"],
-	  frameworks: ["django"],
-	  languages: ["python", "nosql"],
-	  wonAward: true,
-	  description: "Won 2nd most ambitious hack by AppCow at Bitcamp.",
-	  img: {
-	    id: "beheard-1",
-	    src: "images/beheard.jpg"
-	  },
-	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum."
-	}, {
-	  name: "Fly with Friends",
-	  startDate: new Date("September 25, 2015"),
-	  endDate: new Date("September 27, 2015"),
-	  type: "webapp",
-	  experiences: ["webdev"],
-	  frameworks: ["django"],
-	  languages: ["python", "sql"],
-	  wonAward: false,
-	  description: "Entered into HackGT.",
-	  img: {
-	    id: "flywithfriends-1",
-	    src: "images/flywithfriends.png"
-	  },
-	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you."
-	}, {
-	  name: "Matlab Shader",
-	  startDate: new Date("November 20, 2013"),
-	  endDate: new Date("December 05, 2013"),
-	  type: "desktopapp",
-	  experiences: ["appdev"],
-	  frameworks: [],
-	  languages: ["matlab"],
-	  wonAward: false,
-	  description: "Project for introductory Matlab course.",
-	  img: {
-	    id: "matlabshader-1",
-	    src: "images/matlabshader.png"
-	  },
-	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map."
-	}];
 
 	ReactDOM.render(React.createElement(MainContent, { skills: SKILLS, projects: PROJECTS, jobs: JOBS }), document.getElementById('filterable-content'));
 
