@@ -562,7 +562,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      { className: 'row filter-section' },
+	      { className: 'row filter-section timeline-section' },
 	      React.createElement(
 	        'p',
 	        null,

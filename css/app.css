@@ -262,4 +262,7 @@ body {
   .bio {
     display: none;
   }
+  .timeline-section {
+    display: none;
+  }
 }

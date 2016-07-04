@@ -426,7 +426,7 @@ var TimelineFilter = React.createClass({
   },
   render: function() {
     return (
-      <div className="row filter-section">
+      <div className="row filter-section timeline-section">
         <p>Timeline:</p>
         <div id="timeline-filter">
           <div className="large-2 medium-2 small-2 columns">
