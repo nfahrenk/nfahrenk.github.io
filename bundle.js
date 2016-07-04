@@ -611,9 +611,8 @@
 	    var tagInputs = { experiences: [], languages: [], frameworks: [] };
 	    this.props.skills.experiences.forEach(function (exp) {
 	      tagLinks.experiences.push(React.createElement(
-	        'a',
-	        { href: 'javascript:void(0)',
-	          className: this.props[exp.id] ? "tag checked" : "tag",
+	        'span',
+	        { className: this.props[exp.id] ? "tag checked" : "tag",
 	          id: exp.id,
 	          key: "expa" + exp.id,
 	          onClick: this.handleChange },
@@ -628,7 +627,7 @@
 	    }.bind(this));
 	    this.props.skills.frameworks.forEach(function (exp) {
 	      tagLinks.frameworks.push(React.createElement(
-	        'a',
+	        'span',
 	        { href: 'javascript:void(0)',
 	          className: this.props[exp.id] ? "tag checked" : "tag",
 	          id: exp.id,
@@ -645,7 +644,7 @@
 	    }.bind(this));
 	    this.props.skills.languages.forEach(function (exp) {
 	      tagLinks.languages.push(React.createElement(
-	        'a',
+	        'span',
 	        { href: 'javascript:void(0)',
 	          className: this.props[exp.id] ? "tag checked" : "tag",
 	          id: exp.id,

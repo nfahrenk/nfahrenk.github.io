@@ -457,13 +457,12 @@ var SkillListings = React.createClass({
     var tagInputs = {experiences: [], languages: [], frameworks: []};
     this.props.skills.experiences.forEach(function(exp) {
       tagLinks.experiences.push(
-        <a href="javascript:void(0)"
-          className={this.props[exp.id] ? "tag checked" : "tag"}
+        <span className={this.props[exp.id] ? "tag checked" : "tag"}
           id={exp.id}
           key={"expa"+exp.id}
           onClick={this.handleChange}>
           {exp.name}
-        </a>
+        </span>
       );
       tagInputs.experiences.push(
         <input
@@ -476,13 +475,13 @@ var SkillListings = React.createClass({
     }.bind(this));
     this.props.skills.frameworks.forEach(function(exp) {
       tagLinks.frameworks.push(
-        <a href="javascript:void(0)"
+        <span href="javascript:void(0)"
           className={this.props[exp.id] ? "tag checked" : "tag"}
           id={exp.id}
           key={"frma"+exp.id}
           onClick={this.handleChange}>
           {exp.name}
-        </a>
+        </span>
       );
       tagInputs.frameworks.push(
         <input
@@ -495,13 +494,13 @@ var SkillListings = React.createClass({
     }.bind(this));
     this.props.skills.languages.forEach(function(exp) {
       tagLinks.languages.push(
-        <a href="javascript:void(0)"
+        <span href="javascript:void(0)"
           className={this.props[exp.id] ? "tag checked" : "tag"}
           id={exp.id}
           key={"langa"+exp.id}
           onClick={this.handleChange}>
           {exp.name}
-        </a>
+        </span>
       );
       tagInputs.languages.push(
         <input
