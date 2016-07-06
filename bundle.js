@@ -49,44 +49,7 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(38);
 
-	var SKILLS = {
-	  experiences: [{
-	    name: "Web Development",
-	    id: "webdev"
-	  }, {
-	    name: "App Development",
-	    id: "appdev"
-	  }, {
-	    name: "Data Science",
-	    id: "datascience"
-	  }],
-	  frameworks: [{
-	    name: "Django",
-	    id: "django"
-	  }],
-	  languages: [{
-	    name: "Python",
-	    id: "python"
-	  }, {
-	    name: "Swift",
-	    id: "swift"
-	  }, {
-	    name: "SQL",
-	    id: "sql"
-	  }, {
-	    name: "NoSQL",
-	    id: "nosql"
-	  }, {
-	    name: "R",
-	    id: "rlang"
-	  }, {
-	    name: "Java",
-	    id: "java"
-	  }, {
-	    name: "Matlab",
-	    id: "matlab"
-	  }]
-	};
+	var SKILLS = [{ type: "experience", name: "Web Development", id: "webdev" }, { type: "experience", name: "App Development", id: "appdev" }, { type: "experience", name: "Data Science", id: "datascience" }, { type: "framework", name: "Django", id: "django" }, { type: "language", name: "Python", id: "python" }, { type: "language", name: "Swift", id: "swift" }, { type: "language", name: "SQL", id: "sql" }, { type: "language", name: "NoSQL", id: "nosql" }, { type: "language", name: "R", id: "rlang" }, { type: "language", name: "Java", id: "java" }, { type: "language", name: "Matlab", id: "matlab" }];
 
 	var JOBS = [{
 	  company: "Texas Instruments",
@@ -189,7 +152,7 @@
 	  startDate: new Date("November 20, 2013"),
 	  endDate: new Date("December 05, 2013"),
 	  type: "desktopapp",
-	  experiences: ["appdev"],
+	  experiences: [],
 	  frameworks: [],
 	  languages: ["matlab"],
 	  wonAward: false,
@@ -201,9 +164,9 @@
 	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map."
 	}];
 
-	var skillIdToName = function skillIdToName(key, id) {
+	var skillIdToName = function skillIdToName(id) {
 	  var name;
-	  SKILLS[key].forEach(function (skill) {
+	  SKILLS.forEach(function (skill) {
 	    if (skill.id === id) {
 	      name = skill.name;
 	    }
@@ -223,15 +186,27 @@
 	  "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
 	};
 
-	var shouldDisplay = function shouldDisplay(proj, props) {
-	  if (proj.startDate < timeLookup[props.lowertime][0] || proj.endDate > timeLookup[props.uppertime][1]) {
+	var shouldDisplay = function shouldDisplay(proj, tagState, lowertime, uppertime) {
+	  var hasFound = false;
+	  for (var property in tagState) {
+	    if (tagState.hasOwnProperty(property) && tagState[property]) {
+	      hasFound = true;
+	    }
+	  }
+	  // If no tag selected, display all results
+	  if (!hasFound && lowertime === "high school" && uppertime === "present") {
+	    return true;
+	  }
+	  if (proj.startDate < timeLookup[lowertime][0] || proj.endDate > timeLookup[uppertime][1]) {
 
 	    return false;
+	  } else if (!hasFound) {
+	    return true;
 	  }
 	  // Check if it has any of the skill types
-	  var hasFound = false;
+	  hasFound = false;
 	  proj.experiences.concat(proj.frameworks).concat(proj.languages).forEach(function (elem) {
-	    if (props[elem]) {
+	    if (tagState[elem]) {
 	      hasFound = true;
 	    }
 	  }.bind(this));
@@ -317,7 +292,7 @@
 	      frameworks.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: framework },
-	        skillIdToName("frameworks", framework)
+	        skillIdToName(framework)
 	      ));
 	    }.bind(this));
 
@@ -327,7 +302,7 @@
 	      languages.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: language },
-	        skillIdToName("languages", language)
+	        skillIdToName(language)
 	      ));
 	    }.bind(this));
 
@@ -416,7 +391,7 @@
 	    this.props.projects.forEach(function (project) {
 	      rows.push(React.createElement(
 	        'div',
-	        { className: shouldDisplay(project, this.props) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
+	        { className: shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
 	        React.createElement(ProjectBlurb, { project: project }),
 	        React.createElement(Screenshot, { project: project })
 	      ));
@@ -439,7 +414,7 @@
 	      frameworks.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: framework },
-	        skillIdToName("frameworks", framework)
+	        skillIdToName(framework)
 	      ));
 	    }.bind(this));
 
@@ -449,7 +424,7 @@
 	      languages.push(React.createElement(
 	        'span',
 	        { className: 'proj-tag', key: language },
-	        skillIdToName("languages", language)
+	        skillIdToName(language)
 	      ));
 	    }.bind(this));
 
@@ -542,7 +517,7 @@
 	    var rows = [];
 	    var counter = 0;
 	    this.props.jobs.forEach(function (job) {
-	      rows.push(React.createElement(JobBlurb, { job: job, isVisible: shouldDisplay(job, this.props), key: counter }));
+	      rows.push(React.createElement(JobBlurb, { job: job, isVisible: shouldDisplay(job, this.props.tagState, this.props.lowertime, this.props.uppertime), key: counter }));
 	      counter++;
 	    }.bind(this));
 	    return React.createElement(
@@ -607,61 +582,36 @@
 	    this.props.toggleTag(stateProperty, !this.refs[stateProperty].checked);
 	  },
 	  render: function render() {
-	    var tagLinks = { experiences: [], languages: [], frameworks: [] };
-	    var tagInputs = { experiences: [], languages: [], frameworks: [] };
-	    this.props.skills.experiences.forEach(function (exp) {
-	      tagLinks.experiences.push(React.createElement(
+	    var tagLinks = { experience: [], language: [], framework: [] };
+	    var tagInputs = { experience: [], language: [], framework: [] };
+	    this.props.skills.forEach(function (exp) {
+	      tagLinks[exp.type].push(React.createElement(
 	        'span',
-	        { className: this.props[exp.id] ? "tag checked" : "tag",
+	        { className: this.props.tagState[exp.id] ? "tag checked" : "tag",
 	          id: exp.id,
-	          key: "expa" + exp.id,
+	          key: "span" + exp.id,
 	          onClick: this.handleChange },
 	        exp.name
 	      ));
-	      tagInputs.experiences.push(React.createElement('input', {
+	      tagLinks[exp.type].push(React.createElement('input', {
 	        type: 'checkbox', className: 'is-hidden',
 	        ref: exp.id,
-	        key: "expi" + exp.id,
-	        checked: this.props[exp.id]
-	      }));
-	    }.bind(this));
-	    this.props.skills.frameworks.forEach(function (exp) {
-	      tagLinks.frameworks.push(React.createElement(
-	        'span',
-	        { href: 'javascript:void(0)',
-	          className: this.props[exp.id] ? "tag checked" : "tag",
-	          id: exp.id,
-	          key: "frma" + exp.id,
-	          onClick: this.handleChange },
-	        exp.name
-	      ));
-	      tagInputs.frameworks.push(React.createElement('input', {
-	        type: 'checkbox', className: 'is-hidden',
-	        ref: exp.id,
-	        key: "frmi" + exp.id,
-	        checked: this.props[exp.id]
-	      }));
-	    }.bind(this));
-	    this.props.skills.languages.forEach(function (exp) {
-	      tagLinks.languages.push(React.createElement(
-	        'span',
-	        { href: 'javascript:void(0)',
-	          className: this.props[exp.id] ? "tag checked" : "tag",
-	          id: exp.id,
-	          key: "langa" + exp.id,
-	          onClick: this.handleChange },
-	        exp.name
-	      ));
-	      tagInputs.languages.push(React.createElement('input', {
-	        type: 'checkbox', className: 'is-hidden',
-	        ref: exp.id,
-	        key: "langi" + exp.id,
-	        checked: this.props[exp.id]
+	        key: "input" + exp.id,
+	        checked: this.props.tagState[exp.id]
 	      }));
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
 	      { id: 'filters', className: 'large-6 medium-6 small-12 columns' },
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        React.createElement(
+	          'b',
+	          null,
+	          'Use the fields below to filter the results!'
+	        )
+	      ),
 	      React.createElement(TimelineFilter, {
 	        changeTime: this.props.changeTime,
 	        lowertime: this.props.lowertime,
@@ -675,8 +625,8 @@
 	          null,
 	          'Experience:'
 	        ),
-	        tagLinks.experiences,
-	        tagInputs.experiences
+	        tagLinks.experience,
+	        tagInputs.experience
 	      ),
 	      React.createElement(
 	        'div',
@@ -686,8 +636,8 @@
 	          null,
 	          'Frameworks:'
 	        ),
-	        tagLinks.frameworks,
-	        tagInputs.frameworks
+	        tagLinks.framework,
+	        tagInputs.framework
 	      ),
 	      React.createElement(
 	        'div',
@@ -697,8 +647,8 @@
 	          null,
 	          'Languages:'
 	        ),
-	        tagLinks.languages,
-	        tagInputs.languages
+	        tagLinks.language,
+	        tagInputs.language
 	      )
 	    );
 	  }
@@ -712,10 +662,7 @@
 	      "lowertime": "high school",
 	      "uppertime": "present"
 	    };
-	    this.props.skills.experiences.forEach(function (elem) {
-	      out[elem.id] = true;
-	    }.bind(this));
-	    this.props.skills.frameworks.concat(this.props.skills.languages).forEach(function (elem) {
+	    this.props.skills.forEach(function (elem) {
 	      out[elem.id] = false;
 	    }.bind(this));
 	    return out;
@@ -732,6 +679,10 @@
 	    this.setState({ "uppertime": utime });
 	  },
 	  render: function render() {
+	    var tagState = {};
+	    this.props.skills.forEach(function (elem) {
+	      tagState[elem.id] = this.state[elem.id];
+	    }.bind(this));
 	    return React.createElement(
 	      'div',
 	      { id: 'filterable-content' },
@@ -779,7 +730,7 @@
 	              { className: 'highlight' },
 	              'Electrical Engineering'
 	            ),
-	            ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC.'
+	            ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese for eight weeks at Shanghai Jiaotong University, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC. I have participated in all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!'
 	          ),
 	          React.createElement(
 	            'a',
@@ -788,25 +739,13 @@
 	            ' Download Resume'
 	          )
 	        ),
-	        React.createElement(SkillListings, { skills: this.props.skills, webdev: this.state.webdev,
-	          appdev: this.state.appdev, datascience: this.state.datascience,
-	          django: this.state.django, python: this.state.python, swift: this.state.swift,
-	          sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
-	          java: this.state.java, matlab: this.state.matlab,
+	        React.createElement(SkillListings, { skills: this.props.skills, tagState: tagState,
 	          lowertime: this.state.lowertime, uppertime: this.state.uppertime,
 	          toggleTag: this.toggleTag, changeTime: this.changeTime })
 	      ),
-	      React.createElement(ProjectListings, { projects: this.props.projects, webdev: this.state.webdev,
-	        appdev: this.state.appdev, datascience: this.state.datascience,
-	        django: this.state.django, python: this.state.python, swift: this.state.swift,
-	        sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
-	        java: this.state.java, matlab: this.state.matlab,
+	      React.createElement(ProjectListings, { projects: this.props.projects, tagState: tagState,
 	        lowertime: this.state.lowertime, uppertime: this.state.uppertime }),
-	      React.createElement(JobListings, { jobs: this.props.jobs, webdev: this.state.webdev,
-	        appdev: this.state.appdev, datascience: this.state.datascience,
-	        django: this.state.django, python: this.state.python, swift: this.state.swift,
-	        sql: this.state.sql, nosql: this.state.nosql, rlang: this.state.rlang,
-	        java: this.state.java, matlab: this.state.matlab,
+	      React.createElement(JobListings, { jobs: this.props.jobs, tagState: tagState,
 	        lowertime: this.state.lowertime, uppertime: this.state.uppertime })
 	    );
 	  }

@@ -1,58 +1,19 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var SKILLS = {
-  experiences: [
-    {
-      name: "Web Development",
-      id: "webdev"
-    },
-    {
-      name: "App Development",
-      id: "appdev"
-    },
-    {
-      name: "Data Science",
-      id: "datascience"
-    }
-  ],
-  frameworks: [
-    {
-      name: "Django",
-      id: "django"
-    }
-  ],
-  languages: [
-    {
-      name: "Python",
-      id: "python"
-    },
-    {
-      name: "Swift",
-      id: "swift"
-    },
-    {
-      name: "SQL",
-      id: "sql"
-    },
-    {
-      name: "NoSQL",
-      id: "nosql"
-    },
-    {
-      name: "R",
-      id: "rlang"
-    },
-    {
-      name: "Java",
-      id: "java"
-    },
-    {
-      name: "Matlab",
-      id: "matlab"
-    }
-  ]
-}
+var SKILLS = [
+  { type: "experience", name: "Web Development", id: "webdev" },
+  { type: "experience", name: "App Development", id: "appdev" },
+  { type: "experience", name: "Data Science", id: "datascience" },
+  { type: "framework", name: "Django", id: "django" },
+  { type: "language", name: "Python", id: "python" },
+  { type: "language", name: "Swift", id: "swift" },
+  { type: "language", name: "SQL", id: "sql" },
+  { type: "language", name: "NoSQL", id: "nosql" },
+  { type: "language", name: "R", id: "rlang" },
+  { type: "language", name: "Java", id: "java" },
+  { type: "language", name: "Matlab", id: "matlab" }
+];
 
 var JOBS = [
   {
@@ -188,7 +149,7 @@ var PROJECTS = [
     startDate: new Date("November 20, 2013"),
     endDate: new Date("December 05, 2013"),
     type: "desktopapp",
-    experiences: ["appdev"],
+    experiences: [],
     frameworks: [],
     languages: ["matlab"],
     wonAward: false,
@@ -201,9 +162,9 @@ var PROJECTS = [
   }
 ]
 
-var skillIdToName = function(key, id) {
+var skillIdToName = function(id) {
   var name;
-  SKILLS[key].forEach(function(skill) {
+  SKILLS.forEach(function(skill) {
     if (skill.id === id) {name = skill.name;}
   });
   return name;
@@ -222,18 +183,30 @@ var timeLookup = {
   "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
 };
 
-var shouldDisplay = function(proj, props) {
-  if (proj.startDate < timeLookup[props.lowertime][0]
-    || proj.endDate > timeLookup[props.uppertime][1]) {
+var shouldDisplay = function(proj, tagState, lowertime, uppertime) {
+  var hasFound = false;
+  for (var property in tagState) {
+      if (tagState.hasOwnProperty(property) && tagState[property]) {
+          hasFound = true;
+      }
+  }
+  // If no tag selected, display all results
+  if (!hasFound && lowertime === "high school" && uppertime === "present") {
+    return true;
+  }
+  if (proj.startDate < timeLookup[lowertime][0]
+    || proj.endDate > timeLookup[uppertime][1]) {
 
     return false;
+  } else if (!hasFound) {
+    return true;
   }
   // Check if it has any of the skill types
-  var hasFound = false;
+  hasFound = false;
   proj.experiences.concat(
     proj.frameworks).concat(
       proj.languages).forEach(function(elem) {
-        if (props[elem]) { hasFound = true; }
+        if (tagState[elem]) { hasFound = true; }
       }.bind(this));
   return hasFound;
 };
@@ -295,13 +268,13 @@ var ProjectBlurb = React.createClass({
     // Generate frameworks used tags
     var frameworks = [];
     this.props.project.frameworks.forEach(function(framework) {
-      frameworks.push(<span className="proj-tag" key={framework}>{skillIdToName("frameworks", framework)}</span>);
+      frameworks.push(<span className="proj-tag" key={framework}>{skillIdToName(framework)}</span>);
     }.bind(this));
 
     // Generate languages used tags
     var languages = [];
     this.props.project.languages.forEach(function(language) {
-      languages.push(<span className="proj-tag" key={language}>{skillIdToName("languages", language)}</span>);
+      languages.push(<span className="proj-tag" key={language}>{skillIdToName(language)}</span>);
     }.bind(this));
 
     // Only display frameworks if given
@@ -339,7 +312,7 @@ var ProjectListings = React.createClass({
     var ndx = 0;
     this.props.projects.forEach(function(project) {
       rows.push(
-        <div className={shouldDisplay(project, this.props) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
+        <div className={shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
           <ProjectBlurb project={project} />
           <Screenshot project={project} />
         </div>
@@ -354,13 +327,13 @@ var JobBlurb = React.createClass({
     // Generate frameworks used tags
     var frameworks = [];
     this.props.job.frameworks.forEach(function(framework) {
-      frameworks.push(<span className="proj-tag" key={framework}>{skillIdToName("frameworks", framework)}</span>);
+      frameworks.push(<span className="proj-tag" key={framework}>{skillIdToName(framework)}</span>);
     }.bind(this));
 
     // Generate languages used tags
     var languages = [];
     this.props.job.languages.forEach(function(language) {
-      languages.push(<span className="proj-tag" key={language}>{skillIdToName("languages", language)}</span>);
+      languages.push(<span className="proj-tag" key={language}>{skillIdToName(language)}</span>);
     }.bind(this));
 
     // Generate paragraphs of accomplishments
@@ -410,7 +383,7 @@ var JobListings = React.createClass({
     var rows = [];
     var counter = 0;
     this.props.jobs.forEach(function(job) {
-      rows.push(<JobBlurb job={job} isVisible={shouldDisplay(job, this.props)} key={counter}/>);
+      rows.push(<JobBlurb job={job} isVisible={shouldDisplay(job, this.props.tagState, this.props.lowertime, this.props.uppertime)} key={counter}/>);
       counter++;
     }.bind(this));
     return (<div id="jobs">{rows}</div>);
@@ -453,66 +426,29 @@ var SkillListings = React.createClass({
     );
   },
   render: function() {
-    var tagLinks = {experiences: [], languages: [], frameworks: []};
-    var tagInputs = {experiences: [], languages: [], frameworks: []};
-    this.props.skills.experiences.forEach(function(exp) {
-      tagLinks.experiences.push(
-        <span className={this.props[exp.id] ? "tag checked" : "tag"}
+    var tagLinks = {experience: [], language: [], framework: []};
+    var tagInputs = {experience: [], language: [], framework: []};
+    this.props.skills.forEach(function(exp) {
+      tagLinks[exp.type].push(
+        <span className={this.props.tagState[exp.id] ? "tag checked" : "tag"}
           id={exp.id}
-          key={"expa"+exp.id}
+          key={"span"+exp.id}
           onClick={this.handleChange}>
           {exp.name}
         </span>
       );
-      tagInputs.experiences.push(
+      tagLinks[exp.type].push(
         <input
           type="checkbox" className="is-hidden"
           ref={exp.id}
-          key={"expi"+exp.id}
-          checked={this.props[exp.id]}
-        />
-      );
-    }.bind(this));
-    this.props.skills.frameworks.forEach(function(exp) {
-      tagLinks.frameworks.push(
-        <span href="javascript:void(0)"
-          className={this.props[exp.id] ? "tag checked" : "tag"}
-          id={exp.id}
-          key={"frma"+exp.id}
-          onClick={this.handleChange}>
-          {exp.name}
-        </span>
-      );
-      tagInputs.frameworks.push(
-        <input
-          type="checkbox" className="is-hidden"
-          ref={exp.id}
-          key={"frmi"+exp.id}
-          checked={this.props[exp.id]}
-        />
-      );
-    }.bind(this));
-    this.props.skills.languages.forEach(function(exp) {
-      tagLinks.languages.push(
-        <span href="javascript:void(0)"
-          className={this.props[exp.id] ? "tag checked" : "tag"}
-          id={exp.id}
-          key={"langa"+exp.id}
-          onClick={this.handleChange}>
-          {exp.name}
-        </span>
-      );
-      tagInputs.languages.push(
-        <input
-          type="checkbox" className="is-hidden"
-          ref={exp.id}
-          key={"langi"+exp.id}
-          checked={this.props[exp.id]}
+          key={"input"+exp.id}
+          checked={this.props.tagState[exp.id]}
         />
       );
     }.bind(this));
     return (
       <div id="filters" className="large-6 medium-6 small-12 columns">
+        <div className="row"><b>Use the fields below to filter the results!</b></div>
         <TimelineFilter
           changeTime={this.props.changeTime}
           lowertime={this.props.lowertime}
@@ -520,18 +456,18 @@ var SkillListings = React.createClass({
         />
         <div className="row filter-section">
           <p>Experience:</p>
-          {tagLinks.experiences}
-          {tagInputs.experiences}
+          {tagLinks.experience}
+          {tagInputs.experience}
         </div>
         <div className="row filter-section">
           <p>Frameworks:</p>
-          {tagLinks.frameworks}
-          {tagInputs.frameworks}
+          {tagLinks.framework}
+          {tagInputs.framework}
         </div>
         <div className="row filter-section">
           <p>Languages:</p>
-          {tagLinks.languages}
-          {tagInputs.languages}
+          {tagLinks.language}
+          {tagInputs.language}
         </div>
       </div>
     );
@@ -544,13 +480,9 @@ var MainContent = React.createClass({
       "lowertime": "high school",
       "uppertime": "present"
     };
-    this.props.skills.experiences.forEach(function(elem) {
-      out[elem.id] = true;
+    this.props.skills.forEach(function(elem) {
+      out[elem.id] = false;
     }.bind(this));
-    this.props.skills.frameworks.concat(
-      this.props.skills.languages).forEach(function(elem) {
-        out[elem.id] = false;
-      }.bind(this));
     return out;
   },
   toggleTag: function(tagName, tagValue) {
@@ -565,6 +497,10 @@ var MainContent = React.createClass({
     this.setState({"uppertime": utime});
   },
   render: function() {
+    var tagState = {};
+    this.props.skills.forEach(function(elem) {
+      tagState[elem.id] = this.state[elem.id];
+    }.bind(this));
     return (
       <div id="filterable-content">
         <div className="row" id="about">
@@ -577,33 +513,23 @@ var MainContent = React.createClass({
               &nbsp;and 1 of 150 people in the <span className="highlight">Honors Program</span>.
               I am pursuing a bachelors degree in <span className="highlight">Electrical Engineering</span>,
               with a minor in Mandarin Chinese.
-              Through Georgia Tech, I have studied business-specific Mandarin Chinese in Shanghai,
+              Through Georgia Tech, I have studied business-specific Mandarin Chinese
+              for eight weeks at Shanghai Jiaotong University,
               and was 1 of 2 people selected to receive a stipend to intern
-              with the federal government in Washington DC.
+              with the federal government in Washington DC. I have participated in
+              all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!
             </p>
             <a href="documents/resume.pdf" id="download-resume" download>
               <i className="fa fa-download" aria-hidden="true"></i> Download Resume
             </a>
           </div>
-          <SkillListings skills={this.props.skills} webdev={this.state.webdev}
-            appdev={this.state.appdev} datascience={this.state.datascience}
-            django={this.state.django} python={this.state.python} swift={this.state.swift}
-            sql={this.state.sql} nosql={this.state.nosql} rlang={this.state.rlang}
-            java={this.state.java} matlab={this.state.matlab}
+          <SkillListings skills={this.props.skills} tagState={tagState}
             lowertime={this.state.lowertime} uppertime={this.state.uppertime}
             toggleTag={this.toggleTag} changeTime={this.changeTime}/>
         </div>
-        <ProjectListings projects={this.props.projects} webdev={this.state.webdev}
-          appdev={this.state.appdev} datascience={this.state.datascience}
-          django={this.state.django} python={this.state.python} swift={this.state.swift}
-          sql={this.state.sql} nosql={this.state.nosql} rlang={this.state.rlang}
-          java={this.state.java} matlab={this.state.matlab}
+        <ProjectListings projects={this.props.projects} tagState={tagState}
           lowertime={this.state.lowertime} uppertime={this.state.uppertime} />
-        <JobListings jobs={this.props.jobs} webdev={this.state.webdev}
-          appdev={this.state.appdev} datascience={this.state.datascience}
-          django={this.state.django} python={this.state.python} swift={this.state.swift}
-          sql={this.state.sql} nosql={this.state.nosql} rlang={this.state.rlang}
-          java={this.state.java} matlab={this.state.matlab}
+        <JobListings jobs={this.props.jobs} tagState={tagState}
           lowertime={this.state.lowertime} uppertime={this.state.uppertime} />
       </div>
     );

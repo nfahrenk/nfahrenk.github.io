@@ -255,14 +255,14 @@ body {
   .fa-apple {
     font-size: 25px;
   }
+  .timeline-section {
+    display: none;
+  }
   .right-info {
     font-style: italic; }
 }
 @media only screen and (max-width: 639px) {
   .bio {
-    display: none;
-  }
-  .timeline-section {
     display: none;
   }
 }
