@@ -70,7 +70,8 @@
   max-width: none; }
 
 #header {
-  margin-bottom: 20px; }
+  padding: 25px 0px;
+}
 
 .img-circle {
   border-radius: 50%;

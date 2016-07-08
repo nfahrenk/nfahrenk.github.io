@@ -1,6 +1,8 @@
 $(document).foundation();
 
 $(document).ready(function() {
+  console.log("%cLike what you see?", "color: red; font-size: x-large");
+  console.log("Email me ;) ccrunner2013@gmail.com");
   var lookup = {
     1: "high school",
     2: "freshman",
