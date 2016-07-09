@@ -532,7 +532,7 @@
 	  displayName: 'TimelineFilter',
 
 	  handleChange: function handleChange(event) {
-	    this.props.changeTime(this.refs.ltime.innerText, this.refs.utime.innerText);
+	    this.props.changeTime(this.refs.ltime.value, this.refs.utime.value);
 	  },
 	  render: function render() {
 	    return React.createElement(

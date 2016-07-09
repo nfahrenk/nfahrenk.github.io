@@ -31,26 +31,24 @@ $(document).ready(function() {
   $("#upper-timeline").change(function() {
     newPicture("upper-timeline");
   });
-  var previous = [1,4];
-  $( "#timeline-slider").slider({
-      value: 0,
-      range: true,
-      min:1,
-      max:4,
-      step:1,
-      values:previous,
-      slide: function(event, ui) {
-        document.getElementById("lower-timeline").innerText = lookup[ui.values[0]];
-        document.getElementById("upper-timeline").innerText = lookup[ui.values[1]];
-        if (previous[0] !== ui.values[0]) {
-          $("#lower-timeline").trigger("change");
-          $("#lower-timeline").trigger("blur");
-        } else if (previous[1] !== ui.values[1]) {
-          $("#upper-timeline").trigger("change");
-          $("#upper-timeline").trigger("blur");
-        }
-        previous[0] = ui.values[0];
-        previous[1] = ui.values[1];
-      }
+  var slider = document.getElementById('timeline-slider');
+  noUiSlider.create(slider, {
+  	start: [1, 4],
+    step: 1,
+  	connect: true,
+  	range: {
+  		'min': 1,
+  		'max': 4
+  	}
   });
+  slider.noUiSlider.on('update', function( values, handle ) {
+    if ( !handle ) {
+  		document.getElementById("lower-timeline").innerText = lookup[parseInt(values[handle])];
+      $("#lower-timeline").trigger("change");
+  	} else {
+  		document.getElementById("upper-timeline").innerText = lookup[parseInt(values[handle])];
+      $("#upper-timeline").trigger("change");
+  	}
+  });
+
 });
