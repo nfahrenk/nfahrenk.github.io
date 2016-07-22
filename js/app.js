@@ -1,5 +1,50 @@
 $(document).foundation();
 
+function aboutHeight() {
+  var bio = $('#about-bio').height();
+  var filters = $('#filters').height();
+  var larger = bio > filters ? bio : filters;
+  if (Math.abs($('#about').height() - larger) > 25) {
+    $('#about').height(larger+30);
+  }
+};
+
+var mySwiper = undefined;
+
+function initSwiper() {
+  /*
+  How I control having Swiper appear only on mobile
+  Changes only occur when the threshold is passed
+  */
+    var screenWidth = $(window).width();
+    if(screenWidth <= 1023 && mySwiper == undefined) {
+      $('.swiper-slide-duplicate').show();
+      $('#about').addClass("swiper-container");
+      $('#about > div:first-child').addClass("swiper-wrapper");
+      $('#about > div.swiper-wrapper:first-child > div').addClass("swiper-slide");
+      mySwiper = new Swiper('.swiper-container', {
+          pagination: '.swiper-pagination',
+          nextButton: '.swiper-button-next',
+          prevButton: '.swiper-button-prev',
+          slidesPerView: 1,
+          paginationClickable: false,
+          spaceBetween: 0,
+          loop: true
+      });
+    } else if (screenWidth > 1023 && mySwiper != undefined) {
+      // The styles and classes below mess up the desktop interface
+      $('.swiper-wrapper').removeAttr('style');
+      $('.swiper-slide').removeAttr('style');
+      $('#about > div.swiper-wrapper > div.swiper-slide').removeClass("swiper-slide");
+      $('#about > div.swiper-wrapper').removeClass("swiper-wrapper");
+      $('#about').removeClass("swiper-container");
+      $('.swiper-slide-duplicate').hide();
+      // Destroy
+      mySwiper.destroy();
+      mySwiper = undefined;
+    }
+}
+
 $(document).ready(function() {
   console.log("%cLike what you see?", "color: red; font-size: x-large");
   console.log("Email me ;) ccrunner2013@gmail.com");
@@ -45,10 +90,20 @@ $(document).ready(function() {
     if ( !handle ) {
   		document.getElementById("lower-timeline").innerText = lookup[parseInt(values[handle])];
       $("#lower-timeline").trigger("change");
+      $("#lower-timeline").trigger("blur");
   	} else {
   		document.getElementById("upper-timeline").innerText = lookup[parseInt(values[handle])];
       $("#upper-timeline").trigger("change");
+      $("#upper-timeline").trigger("blur");
   	}
   });
 
+  //Swiper plugin initialization
+  initSwiper();
+  aboutHeight();
+  //Swiper plugin initialization on window resize
+  $(window).on('resize', function(){
+      initSwiper();
+      aboutHeight();
+  });
 });

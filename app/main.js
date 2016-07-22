@@ -25,9 +25,10 @@ var JOBS = [
     languages: ["java", "sql"],
     position: "Demand Creation Development Intern",
     accomplishments: [
-      "Secured documents for upload/download and export with the correct confidential level",
+      "Secured documents for upload/download and export with the correct confidential classification",
       "Worked on development of internal sales tool for project portfolio management",
-      "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"
+      "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit",
+      "Helped develop proof of concept \"chip suggestion engine\" for ti.com using Amazon AWS and Apache Spark"
     ]
   },
   {
@@ -96,6 +97,22 @@ var JOBS = [
 ]
 
 var PROJECTS = [
+  {
+    name: "Publy",
+    startDate: new Date("June 19, 2016"),
+    endDate: new Date("August 06, 2016"),
+    type: "webapp",
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "sql"],
+    wonAward: true,
+    description: "Entered into TI Intern DIY Day.",
+    img: {
+      id: "publy-1",
+      src: "images/publy.png"
+    },
+    about: "A BeagleBone was used to create a driver's license scanner. Each scan updates a publicly available web application with analytics about gender, age, and number of people at the bars in your area.",
+  },
   {
     name: "Babelboard",
     startDate: new Date("September 19, 2014"),
@@ -170,10 +187,22 @@ var skillIdToName = function(id) {
   return name;
 };
 
-var getFormattedDate = function(d) {
+var lookupMonth = function(month) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
-  return monthNames[d.getMonth()] + " " + d.getFullYear();
+  return monthNames[month];
+}
+
+var getFormattedDate = function(d) {
+  return lookupMonth(d.getMonth()) + " " + d.getFullYear();
+};
+
+var getFormattedDateRange = function(d1, d2) {
+  if (d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()) {
+    return getFormattedDate(d1);
+  } else {
+    return getFormattedDate(d1) + " ~ " + getFormattedDate(d2);
+  }
 };
 
 var timeLookup = {
@@ -257,6 +286,17 @@ var Screenshot = React.createClass({
   }
 });
 
+var InfoTag = React.createClass({
+  render: function() {
+    return (
+      <h1 className="info-label">
+        {this.props.experiences.length > 0 ? skillIdToName(this.props.experiences[0]) : "Other"}
+        <span>{getFormattedDateRange(this.props.startDate, this.props.endDate)}</span>
+      </h1>
+    );
+  }
+});
+
 var ProjectBlurb = React.createClass({
   render: function() {
     // If project won an award
@@ -311,8 +351,18 @@ var ProjectListings = React.createClass({
     var rows = [];
     var ndx = 0;
     this.props.projects.forEach(function(project) {
+      var isDisplay = shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ?
+        "row project is-visible" :
+        "row project is-hidden";
       rows.push(
-        <div className={shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
+        <div className={isDisplay} key={"info"+project.img.id}>
+          <InfoTag experiences={project.experiences}
+            startDate={project.startDate}
+            endDate={project.endDate} />
+        </div>
+      );
+      rows.push(
+        <div className={isDisplay} key={"content"+project.img.id}>
           <ProjectBlurb project={project} />
           <Screenshot project={project} />
         </div>
@@ -363,12 +413,14 @@ var JobBlurb = React.createClass({
     return (
       <div className={this.props.isVisible ? "row job is-visible" : "row job is-hidden"}>
         <div className="row">
-          <div className="large-8 small-12 columns">
+        <InfoTag experiences={this.props.job.experiences}
+          startDate={this.props.job.startDate}
+          endDate={this.props.job.endDate} />
+        </div>
+        <div className="row">
+          <div className="large-12 small-12 columns">
             <h3>{this.props.job.company}</h3>
             <h4>{this.props.job.position}</h4>
-          </div>
-          <div className="large-4 small-12 columns right-info">
-            {getFormattedDate(this.props.job.startDate)} ~ {getFormattedDate(this.props.job.endDate)}
           </div>
         </div>
         {rows}
@@ -392,6 +444,7 @@ var JobListings = React.createClass({
 
 var TimelineFilter = React.createClass({
   handleChange: function(event) {
+    console.log("Filter time");
     this.props.changeTime(
       this.refs.ltime.innerText,
       this.refs.utime.innerText
@@ -402,13 +455,13 @@ var TimelineFilter = React.createClass({
       <div className="row filter-section timeline-section">
         <p>Timeline:</p>
         <div id="timeline-filter">
-          <div className="large-2 medium-2 small-2 columns">
+          <div className="timeline-side">
             <span id="lower-timeline" ref="ltime">high school</span>
           </div>
-          <div className="large-8 medium-8 small-8 columns" onBlur={this.handleChange}>
+          <div className="timeline-middle" onChange={this.handleChange}>
             <div id="timeline-slider"></div>
           </div>
-          <div className="large-2 medium-2 small-2 columns">
+          <div className="timeline-side">
             <span id="upper-timeline" ref="utime">present</span>
           </div>
         </div>
@@ -447,7 +500,7 @@ var SkillListings = React.createClass({
       );
     }.bind(this));
     return (
-      <div id="filters" className="large-6 medium-6 small-12 columns">
+      <div id="filters" className="half-large">
         <div className="row"><b>Use the fields below to filter the results!</b></div>
         <TimelineFilter
           changeTime={this.props.changeTime}
@@ -503,29 +556,34 @@ var MainContent = React.createClass({
     }.bind(this));
     return (
       <div id="filterable-content">
-        <div className="row" id="about">
-          <div className="large-6 medium-6 small-12 columns bio">
-            <h2>Hi, I Am...</h2>
-            <p>
-              A <span className="highlight">senior</span> at &nbsp;
-              <span className="highlight">Georgia Institute of Technology</span>
-              &nbsp;with a <span className="highlight">3.68 GPA</span>
-              &nbsp;and 1 of 150 people in the <span className="highlight">Honors Program</span>.
-              I am pursuing a bachelors degree in <span className="highlight">Electrical Engineering</span>,
-              with a minor in Mandarin Chinese.
-              Through Georgia Tech, I have studied business-specific Mandarin Chinese
-              for eight weeks at Shanghai Jiaotong University,
-              and was 1 of 2 people selected to receive a stipend to intern
-              with the federal government in Washington DC. I have participated in
-              all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!
-            </p>
-            <a href="documents/resume.pdf" id="download-resume" download>
-              <i className="fa fa-download" aria-hidden="true"></i> Download Resume
-            </a>
+        <div id="about">
+          <div>
+            <div id="about-bio" className="half-large bio">
+              <h2>Hi, I Am...</h2>
+              <p>
+                A <span className="highlight">senior</span> at &nbsp;
+                <span className="highlight">Georgia Institute of Technology</span>with
+                a <span className="highlight">3.68 GPA</span>
+                &nbsp;and 1 of 150 people in the <span className="highlight">Honors Program</span>.
+                I am pursuing a bachelors degree in <span className="highlight">Electrical Engineering</span>,
+                with a minor in Mandarin Chinese.
+                Through Georgia Tech, I have studied business-specific Mandarin Chinese
+                for eight weeks at Shanghai Jiaotong University,
+                and was 1 of 2 people selected to receive a stipend to intern
+                with the federal government in Washington DC. I have participated in
+                all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!
+              </p>
+              <a href="documents/resume.pdf" id="download-resume" download>
+                <i className="fa fa-download" aria-hidden="true"></i> Download Resume
+              </a>
+            </div>
+            <SkillListings skills={this.props.skills} tagState={tagState}
+              lowertime={this.state.lowertime} uppertime={this.state.uppertime}
+              toggleTag={this.toggleTag} changeTime={this.changeTime}/>
           </div>
-          <SkillListings skills={this.props.skills} tagState={tagState}
-            lowertime={this.state.lowertime} uppertime={this.state.uppertime}
-            toggleTag={this.toggleTag} changeTime={this.changeTime}/>
+          <div className="swiper-pagination"></div>
+          <div className="swiper-button-next"></div>
+          <div className="swiper-button-prev"></div>
         </div>
         <ProjectListings projects={this.props.projects} tagState={tagState}
           lowertime={this.state.lowertime} uppertime={this.state.uppertime} />

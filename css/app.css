@@ -1,3 +1,24 @@
+.timeline-side {
+  width: 10%;
+  display: inline-block;
+}
+.timeline-middle {
+  width: 76%;
+  display: inline-block;
+}
+.info-label {
+  border: solid 1px #0A0A0A;
+  color: #0A0A0A;
+  display: inline-block;
+  padding: 10px;
+  padding-left: 50px;
+  margin-left: -5%;
+  font-size: 1em;
+}
+.info-label > span {
+  display: block;
+  font-size: .4em;
+}
 .job {
   padding: 25px 0px;
 }
@@ -24,7 +45,6 @@
   color: white;
 }
 #timeline-slider {
-  top:18.6px;
   background: none !important;
   border: none !important;
 }
@@ -80,11 +100,14 @@
   text-decoration: underline;
 }
 
+
 #about {
-  padding: 15px 4%;
+  /*padding: 15px 4%;*/
   background-color: #f24b4b;
-  margin: 0px;
-  max-width: none; }
+  /*margin: 0px;*/
+  max-width: none;
+  /*height: 500px;*/
+}
 
 #header {
   padding: 25px 0px;
@@ -125,7 +148,7 @@
   background-color: #480fa3; }
 
 .project {
-  padding: 25px 0px;
+  padding: 10px 0px;
 }
 
 .webapp-nav {
@@ -218,7 +241,8 @@ body {
 #projects {
   background-color: #6bd6f1;
   max-width: none;
-  padding: 0px 4%; }
+  padding: 0px 4%;
+}
 
 .description {
   padding: 15px 25px; }
@@ -257,7 +281,19 @@ body {
     transform: rotate(-15deg); }
 
   .right-info {
-    text-align: right; } }
+    text-align: right;
+  }
+
+  .half-large {
+    width:50%;
+    float: left;
+    display: inline-block;
+  }
+
+  .swiper-pagination, .swiper-button-next, .swiper-button-prev {
+    display: none;
+  }
+}
 @media only screen and (max-width: 768px) {
   #lower-timeline, #upper-timeline {
     font-size: 80%;
@@ -278,9 +314,10 @@ body {
   }
   .right-info {
     font-style: italic; }
-}
-@media only screen and (max-width: 639px) {
-  .bio {
-    display: none;
+  .timeline-side {
+    width: 15%;
+  }
+  .timeline-middle {
+    width: 70%;
   }
 }

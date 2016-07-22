@@ -59,7 +59,7 @@
 	  frameworks: [],
 	  languages: ["java", "sql"],
 	  position: "Demand Creation Development Intern",
-	  accomplishments: ["Secured documents for upload/download and export with the correct confidential level", "Worked on development of internal sales tool for project portfolio management", "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"]
+	  accomplishments: ["Secured documents for upload/download and export with the correct confidential classification", "Worked on development of internal sales tool for project portfolio management", "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit", "Helped develop proof of concept \"chip suggestion engine\" for ti.com in Apache Spark"]
 	}, {
 	  company: "Stackfolio LLC",
 	  startDate: new Date("May 16, 2015"),
@@ -103,6 +103,21 @@
 	}];
 
 	var PROJECTS = [{
+	  name: "Publy",
+	  startDate: new Date("June 19, 2016"),
+	  endDate: new Date("August 06, 2016"),
+	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "sql"],
+	  wonAward: true,
+	  description: "Entered into TI Intern DIY Day.",
+	  img: {
+	    id: "publy-1",
+	    src: "images/publy.png"
+	  },
+	  about: "A BeagleBone was used to create a driver's license scanner. Each scan updates a publicly available web application with analytics about gender, age, and number of people at the bars in your area."
+	}, {
 	  name: "Babelboard",
 	  startDate: new Date("September 19, 2014"),
 	  endDate: new Date("September 21, 2014"),
@@ -174,9 +189,21 @@
 	  return name;
 	};
 
-	var getFormattedDate = function getFormattedDate(d) {
+	var lookupMonth = function lookupMonth(month) {
 	  var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	  return monthNames[d.getMonth()] + " " + d.getFullYear();
+	  return monthNames[month];
+	};
+
+	var getFormattedDate = function getFormattedDate(d) {
+	  return lookupMonth(d.getMonth()) + " " + d.getFullYear();
+	};
+
+	var getFormattedDateRange = function getFormattedDateRange(d1, d2) {
+	  if (d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()) {
+	    return getFormattedDate(d1);
+	  } else {
+	    return getFormattedDate(d1) + " ~ " + getFormattedDate(d2);
+	  }
 	};
 
 	var timeLookup = {
@@ -265,6 +292,23 @@
 	      'div',
 	      { className: 'large-6 medium-12 small-12 columns' },
 	      content
+	    );
+	  }
+	});
+
+	var InfoTag = React.createClass({
+	  displayName: 'InfoTag',
+
+	  render: function render() {
+	    return React.createElement(
+	      'h1',
+	      { className: 'info-label' },
+	      this.props.experiences.length > 0 ? skillIdToName(this.props.experiences[0]) : "Other",
+	      React.createElement(
+	        'span',
+	        null,
+	        getFormattedDateRange(this.props.startDate, this.props.endDate)
+	      )
 	    );
 	  }
 	});
@@ -389,9 +433,17 @@
 	    var rows = [];
 	    var ndx = 0;
 	    this.props.projects.forEach(function (project) {
+	      var isDisplay = shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden";
 	      rows.push(React.createElement(
 	        'div',
-	        { className: shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
+	        { className: isDisplay, key: "info" + project.img.id },
+	        React.createElement(InfoTag, { experiences: project.experiences,
+	          startDate: project.startDate,
+	          endDate: project.endDate })
+	      ));
+	      rows.push(React.createElement(
+	        'div',
+	        { className: isDisplay, key: "content" + project.img.id },
 	        React.createElement(ProjectBlurb, { project: project }),
 	        React.createElement(Screenshot, { project: project })
 	      ));
@@ -482,9 +534,16 @@
 	      React.createElement(
 	        'div',
 	        { className: 'row' },
+	        React.createElement(InfoTag, { experiences: this.props.job.experiences,
+	          startDate: this.props.job.startDate,
+	          endDate: this.props.job.endDate })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-8 small-12 columns' },
+	          { className: 'large-12 small-12 columns' },
 	          React.createElement(
 	            'h3',
 	            null,
@@ -495,13 +554,6 @@
 	            null,
 	            this.props.job.position
 	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'large-4 small-12 columns right-info' },
-	          getFormattedDate(this.props.job.startDate),
-	          ' ~ ',
-	          getFormattedDate(this.props.job.endDate)
 	        )
 	      ),
 	      rows,
@@ -532,7 +584,8 @@
 	  displayName: 'TimelineFilter',
 
 	  handleChange: function handleChange(event) {
-	    this.props.changeTime(this.refs.ltime.value, this.refs.utime.value);
+	    console.log("Filter time");
+	    this.props.changeTime(this.refs.ltime.innerText, this.refs.utime.innerText);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -548,7 +601,7 @@
 	        { id: 'timeline-filter' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-2 medium-2 small-2 columns' },
+	          { className: 'timeline-side' },
 	          React.createElement(
 	            'span',
 	            { id: 'lower-timeline', ref: 'ltime' },
@@ -557,12 +610,12 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'large-8 medium-8 small-8 columns', onBlur: this.handleChange },
+	          { className: 'timeline-middle', onChange: this.handleChange },
 	          React.createElement('div', { id: 'timeline-slider' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'large-2 medium-2 small-2 columns' },
+	          { className: 'timeline-side' },
 	          React.createElement(
 	            'span',
 	            { id: 'upper-timeline', ref: 'utime' },
@@ -602,7 +655,7 @@
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
-	      { id: 'filters', className: 'large-6 medium-6 small-12 columns' },
+	      { id: 'filters', className: 'half-large' },
 	      React.createElement(
 	        'div',
 	        { className: 'row' },
@@ -688,60 +741,67 @@
 	      { id: 'filterable-content' },
 	      React.createElement(
 	        'div',
-	        { className: 'row', id: 'about' },
+	        { id: 'about' },
 	        React.createElement(
 	          'div',
-	          { className: 'large-6 medium-6 small-12 columns bio' },
+	          null,
 	          React.createElement(
-	            'h2',
-	            null,
-	            'Hi, I Am...'
+	            'div',
+	            { id: 'about-bio', className: 'half-large bio' },
+	            React.createElement(
+	              'h2',
+	              null,
+	              'Hi, I Am...'
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'A ',
+	              React.createElement(
+	                'span',
+	                { className: 'highlight' },
+	                'senior'
+	              ),
+	              ' at  ',
+	              React.createElement(
+	                'span',
+	                { className: 'highlight' },
+	                'Georgia Institute of Technology'
+	              ),
+	              'with a ',
+	              React.createElement(
+	                'span',
+	                { className: 'highlight' },
+	                '3.68 GPA'
+	              ),
+	              ' and 1 of 150 people in the ',
+	              React.createElement(
+	                'span',
+	                { className: 'highlight' },
+	                'Honors Program'
+	              ),
+	              '. I am pursuing a bachelors degree in ',
+	              React.createElement(
+	                'span',
+	                { className: 'highlight' },
+	                'Electrical Engineering'
+	              ),
+	              ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese for eight weeks at Shanghai Jiaotong University, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC. I have participated in all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!'
+	            ),
+	            React.createElement(
+	              'a',
+	              { href: 'documents/resume.pdf', id: 'download-resume', download: true },
+	              React.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' }),
+	              ' Download Resume'
+	            )
 	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'A ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'senior'
-	            ),
-	            ' at  ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Georgia Institute of Technology'
-	            ),
-	            ' with a ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              '3.68 GPA'
-	            ),
-	            ' and 1 of 150 people in the ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Honors Program'
-	            ),
-	            '. I am pursuing a bachelors degree in ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Electrical Engineering'
-	            ),
-	            ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese for eight weeks at Shanghai Jiaotong University, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC. I have participated in all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!'
-	          ),
-	          React.createElement(
-	            'a',
-	            { href: 'documents/resume.pdf', id: 'download-resume', download: true },
-	            React.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' }),
-	            ' Download Resume'
-	          )
+	          React.createElement(SkillListings, { skills: this.props.skills, tagState: tagState,
+	            lowertime: this.state.lowertime, uppertime: this.state.uppertime,
+	            toggleTag: this.toggleTag, changeTime: this.changeTime })
 	        ),
-	        React.createElement(SkillListings, { skills: this.props.skills, tagState: tagState,
-	          lowertime: this.state.lowertime, uppertime: this.state.uppertime,
-	          toggleTag: this.toggleTag, changeTime: this.changeTime })
+	        React.createElement('div', { className: 'swiper-pagination' }),
+	        React.createElement('div', { className: 'swiper-button-next' }),
+	        React.createElement('div', { className: 'swiper-button-prev' })
 	      ),
 	      React.createElement(ProjectListings, { projects: this.props.projects, tagState: tagState,
 	        lowertime: this.state.lowertime, uppertime: this.state.uppertime }),
