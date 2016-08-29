@@ -103,6 +103,22 @@
 	}];
 
 	var PROJECTS = [{
+	  name: "Publy",
+	  startDate: new Date("June 19, 2016"),
+	  endDate: new Date("July 28, 2016"),
+	  type: "webapp",
+	  experiences: ["webdev"],
+	  frameworks: ["django"],
+	  languages: ["python", "sql"],
+	  wonAward: false,
+	  description: "Entered into DIY with TI: Intern Edition.",
+	  img: {
+	    id: "publy-1",
+	    src: "images/publy.png"
+	  },
+	  about: "This web app display music, gender, age, and activity analytics about nearby bars through an API compatible with drivers license scanner and a Beaglebone sensor hub.",
+	  links: [{ "label": "View docs", "link": "https://e2e.ti.com/group/launchyourdesign/m/intern2016/666631" }, { "label": "View site", "link": "http://publydemo.nickfahrenkrog.me:8000/" }]
+	}, {
 	  name: "Babelboard",
 	  startDate: new Date("September 19, 2014"),
 	  endDate: new Date("September 21, 2014"),
@@ -116,7 +132,8 @@
 	    id: "babelboard-1",
 	    src: "images/babelboard.jpg"
 	  },
-	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard."
+	  about: "This keyboard allows you to perform simple calculations and translations from the keyboard.",
+	  links: []
 	}, {
 	  name: "Be Heard",
 	  startDate: new Date("April 10, 2015"),
@@ -131,7 +148,8 @@
 	    id: "beheard-1",
 	    src: "images/beheard.jpg"
 	  },
-	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum."
+	  about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.",
+	  links: []
 	}, {
 	  name: "Fly with Friends",
 	  startDate: new Date("September 25, 2015"),
@@ -146,7 +164,8 @@
 	    id: "flywithfriends-1",
 	    src: "images/flywithfriends.png"
 	  },
-	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you."
+	  about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you.",
+	  links: []
 	}, {
 	  name: "Matlab Shader",
 	  startDate: new Date("November 20, 2013"),
@@ -161,7 +180,8 @@
 	    id: "matlabshader-1",
 	    src: "images/matlabshader.png"
 	  },
-	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map."
+	  about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map.",
+	  links: []
 	}];
 
 	var skillIdToName = function skillIdToName(id) {
@@ -174,9 +194,24 @@
 	  return name;
 	};
 
-	var getFormattedDate = function getFormattedDate(d) {
+	var lookupMonth = function lookupMonth(m) {
 	  var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-	  return monthNames[d.getMonth()] + " " + d.getFullYear();
+	  return monthNames[m];
+	};
+
+	var getFormattedDate = function getFormattedDate(d) {
+	  return lookupMonth(d.getMonth()) + " " + d.getFullYear();
+	};
+
+	var getFormattedDateRange = function getFormattedDateRange(d1, d2) {
+	  /**
+	  * d1 - start date
+	   */
+	  if (d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()) {
+	    return getFormattedDate(d1);
+	  } else if (d1.getFullYear() === d2.getFullYear()) {} else if (d1.getMonth() === d2.getMonth()) {} else {
+	    return getFormattedDate(d1) + " - " + getFormattedDate(d2);
+	  }
 	};
 
 	var timeLookup = {
@@ -286,6 +321,16 @@
 	      this.props.project.description
 	    );
 
+	    // Generate experiences used tags
+	    var experiences = [];
+	    this.props.project.experiences.forEach(function (experience) {
+	      experiences.push(React.createElement(
+	        'span',
+	        { className: 'proj-tag', key: experience },
+	        skillIdToName(experience)
+	      ));
+	    }.bind(this));
+
 	    // Generate frameworks used tags
 	    var frameworks = [];
 	    this.props.project.frameworks.forEach(function (framework) {
@@ -306,40 +351,52 @@
 	      ));
 	    }.bind(this));
 
-	    // Only display frameworks if given
-	    var tools = frameworks.length > 0 ? React.createElement(
-	      'div',
-	      { className: 'tagGroups' },
-	      React.createElement(
+	    var tagGroups = [];
+	    if (experiences.length > 0) {
+	      tagGroups.push(React.createElement(
 	        'div',
-	        { className: 'project-frameworks' },
+	        { className: 'project-experiences', key: 'experience' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'EXPERIENCES'
+	        ),
+	        experiences
+	      ));
+	    }
+	    if (frameworks.length > 0) {
+	      tagGroups.push(React.createElement(
+	        'div',
+	        { className: 'project-frameworks', key: 'framework' },
 	        React.createElement(
 	          'p',
 	          null,
 	          'FRAMEWORKS'
 	        ),
 	        frameworks
-	      ),
-	      React.createElement(
+	      ));
+	    }
+	    if (languages.length > 0) {
+	      tagGroups.push(React.createElement(
 	        'div',
-	        { className: 'project-languages' },
+	        { className: 'project-languages', key: 'language' },
 	        React.createElement(
 	          'p',
 	          null,
 	          'LANGUAGES'
 	        ),
 	        languages
-	      )
-	    ) : React.createElement(
-	      'div',
-	      { className: 'project-languages' },
-	      React.createElement(
-	        'p',
-	        null,
-	        'LANGUAGES'
-	      ),
-	      languages
-	    );
+	      ));
+	    }
+
+	    var links = [];
+	    this.props.project.links.forEach(function (link) {
+	      links.push(React.createElement(
+	        'a',
+	        { href: link.link, className: 'button tiny', key: link.label },
+	        link.label
+	      ));
+	    });
 
 	    // Render the project
 	    return React.createElement(
@@ -368,14 +425,15 @@
 	            'p',
 	            null,
 	            this.props.project.about
-	          )
+	          ),
+	          links.length > 0 ? links : null
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'large-6 medium-6 small-12 columns' },
 	          '-',
 	          React.createElement('br', null),
-	          tools
+	          tagGroups
 	        )
 	      )
 	    );
@@ -532,7 +590,8 @@
 	  displayName: 'TimelineFilter',
 
 	  handleChange: function handleChange(event) {
-	    this.props.changeTime(this.refs.ltime.value, this.refs.utime.value);
+	    console.log("Sup");
+	    this.props.changeTime(this.refs.ltime.innerText, this.refs.utime.innerText);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -549,25 +608,17 @@
 	        React.createElement(
 	          'div',
 	          { className: 'large-2 medium-2 small-2 columns' },
-	          React.createElement(
-	            'span',
-	            { id: 'lower-timeline', ref: 'ltime' },
-	            'high school'
-	          )
+	          React.createElement('input', { type: 'text', id: 'lower-timeline', ref: 'ltime', value: 'high school', onChange: this.handleChange })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'large-8 medium-8 small-8 columns', onBlur: this.handleChange },
+	          { className: 'large-8 medium-8 small-8 columns' },
 	          React.createElement('div', { id: 'timeline-slider' })
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'large-2 medium-2 small-2 columns' },
-	          React.createElement(
-	            'span',
-	            { id: 'upper-timeline', ref: 'utime' },
-	            'present'
-	          )
+	          React.createElement('input', { type: 'text', id: 'upper-timeline', ref: 'utime', value: 'present', onChange: this.handleChange })
 	        )
 	      )
 	    );
@@ -602,14 +653,14 @@
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
-	      { id: 'filters', className: 'large-6 medium-6 small-12 columns' },
+	      { id: 'filters', className: 'large-8 large-offset-2 medium-10 medium-offset-1 small-12 columns' },
 	      React.createElement(
 	        'div',
 	        { className: 'row' },
 	        React.createElement(
-	          'b',
+	          'p',
 	          null,
-	          'Use the fields below to filter the results!'
+	          'Filter my projects and work experience!'
 	        )
 	      ),
 	      React.createElement(TimelineFilter, {
@@ -689,56 +740,6 @@
 	      React.createElement(
 	        'div',
 	        { className: 'row', id: 'about' },
-	        React.createElement(
-	          'div',
-	          { className: 'large-6 medium-6 small-12 columns bio' },
-	          React.createElement(
-	            'h2',
-	            null,
-	            'Hi, I Am...'
-	          ),
-	          React.createElement(
-	            'p',
-	            null,
-	            'A ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'senior'
-	            ),
-	            ' at  ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Georgia Institute of Technology'
-	            ),
-	            ' with a ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              '3.68 GPA'
-	            ),
-	            ' and 1 of 150 people in the ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Honors Program'
-	            ),
-	            '. I am pursuing a bachelors degree in ',
-	            React.createElement(
-	              'span',
-	              { className: 'highlight' },
-	              'Electrical Engineering'
-	            ),
-	            ', with a minor in Mandarin Chinese. Through Georgia Tech, I have studied business-specific Mandarin Chinese for eight weeks at Shanghai Jiaotong University, and was 1 of 2 people selected to receive a stipend to intern with the federal government in Washington DC. I have participated in all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!'
-	          ),
-	          React.createElement(
-	            'a',
-	            { href: 'documents/resume.pdf', id: 'download-resume', download: true },
-	            React.createElement('i', { className: 'fa fa-download', 'aria-hidden': 'true' }),
-	            ' Download Resume'
-	          )
-	        ),
 	        React.createElement(SkillListings, { skills: this.props.skills, tagState: tagState,
 	          lowertime: this.state.lowertime, uppertime: this.state.uppertime,
 	          toggleTag: this.toggleTag, changeTime: this.changeTime })

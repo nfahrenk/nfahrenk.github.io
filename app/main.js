@@ -97,6 +97,26 @@ var JOBS = [
 
 var PROJECTS = [
   {
+    name: "Publy",
+    startDate: new Date("June 19, 2016"),
+    endDate: new Date("July 28, 2016"),
+    type: "webapp",
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "sql"],
+    wonAward: false,
+    description: "Entered into DIY with TI: Intern Edition.",
+    img: {
+      id: "publy-1",
+      src: "images/publy.png"
+    },
+    about: "This web app display music, gender, age, and activity analytics about nearby bars through an API compatible with drivers license scanner and a Beaglebone sensor hub.",
+    links: [
+      {"label": "View docs", "link": "https://e2e.ti.com/group/launchyourdesign/m/intern2016/666631"},
+      {"label": "View site", "link": "http://publydemo.nickfahrenkrog.me:8000/"},
+    ]
+  },
+  {
     name: "Babelboard",
     startDate: new Date("September 19, 2014"),
     endDate: new Date("September 21, 2014"),
@@ -111,6 +131,7 @@ var PROJECTS = [
       src: "images/babelboard.jpg"
     },
     about: "This keyboard allows you to perform simple calculations and translations from the keyboard.",
+    links: []
   },
   {
     name: "Be Heard",
@@ -127,6 +148,7 @@ var PROJECTS = [
       src: "images/beheard.jpg"
     },
     about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.",
+    links: []
   },
   {
     name: "Fly with Friends",
@@ -143,6 +165,7 @@ var PROJECTS = [
       src: "images/flywithfriends.png"
     },
     about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you.",
+    links: []
   },
   {
     name: "Matlab Shader",
@@ -159,6 +182,7 @@ var PROJECTS = [
       src: "images/matlabshader.png"
     },
     about: "This application randomly generates a layout of tree stumps. The user can click anywhere on the application to set the light source, and the shader will appropriately recalculate lighting taking into account the tree stump's normal map.",
+    links: []
   }
 ]
 
@@ -170,11 +194,32 @@ var skillIdToName = function(id) {
   return name;
 };
 
-var getFormattedDate = function(d) {
+var lookupMonth = function(m) {
   var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
-  return monthNames[d.getMonth()] + " " + d.getFullYear();
+  return monthNames[m];
+}
+
+var getFormattedDate = function(d) {
+  return lookupMonth(d.getMonth()) + " " + d.getFullYear();
 };
+
+var getFormattedDateRange = function(d1, d2) {
+  /**
+  * d1 - start date
+
+  */
+  if (d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear()) {
+    return getFormattedDate(d1);
+  } else if (d1.getFullYear() === d2.getFullYear()) {
+
+  } else if (d1.getMonth() === d2.getMonth()) {
+
+  } else {
+    return getFormattedDate(d1) + " - " + getFormattedDate(d2);
+  }
+
+}
 
 var timeLookup = {
   "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
@@ -265,6 +310,12 @@ var ProjectBlurb = React.createClass({
       &nbsp;{this.props.project.description}</h3> :
       <h3>{this.props.project.description}</h3>;
 
+    // Generate experiences used tags
+    var experiences = [];
+    this.props.project.experiences.forEach(function(experience) {
+      experiences.push(<span className="proj-tag" key={experience}>{skillIdToName(experience)}</span>);
+    }.bind(this));
+
     // Generate frameworks used tags
     var frameworks = [];
     this.props.project.frameworks.forEach(function(framework) {
@@ -277,13 +328,21 @@ var ProjectBlurb = React.createClass({
       languages.push(<span className="proj-tag" key={language}>{skillIdToName(language)}</span>);
     }.bind(this));
 
-    // Only display frameworks if given
-    var tools = frameworks.length > 0 ?
-      <div className="tagGroups">
-        <div className="project-frameworks"><p>FRAMEWORKS</p>{frameworks}</div>
-        <div className="project-languages"><p>LANGUAGES</p>{languages}</div>
-      </div> :
-      <div className="project-languages"><p>LANGUAGES</p>{languages}</div>;
+    var tagGroups = [];
+    if (experiences.length > 0) {
+      tagGroups.push(<div className="project-experiences" key="experience"><p>EXPERIENCES</p>{experiences}</div>);
+    }
+    if (frameworks.length > 0) {
+      tagGroups.push(< div className="project-frameworks" key="framework"><p>FRAMEWORKS</p>{frameworks}</div>);
+    }
+    if (languages.length > 0) {
+      tagGroups.push(<div className="project-languages" key="language"><p>LANGUAGES</p>{languages}</div>);
+    }
+
+    var links = [];
+    this.props.project.links.forEach(function(link) {
+      links.push(<a href={link.link} className="button tiny" key={link.label}>{link.label}</a>);
+    });
 
     // Render the project
     return (
@@ -295,10 +354,11 @@ var ProjectBlurb = React.createClass({
             -<br/>
             <p>ABOUT</p>
             <p>{this.props.project.about}</p>
+            {links.length > 0 ? links : null}
           </div>
           <div className="large-6 medium-6 small-12 columns">
             -<br/>
-            {tools}
+            {tagGroups}
           </div>
         </div>
       </div>
@@ -392,6 +452,7 @@ var JobListings = React.createClass({
 
 var TimelineFilter = React.createClass({
   handleChange: function(event) {
+    console.log("Sup");
     this.props.changeTime(
       this.refs.ltime.innerText,
       this.refs.utime.innerText
@@ -403,13 +464,13 @@ var TimelineFilter = React.createClass({
         <p>Timeline:</p>
         <div id="timeline-filter">
           <div className="large-2 medium-2 small-2 columns">
-            <span id="lower-timeline" ref="ltime">high school</span>
+            <input type="text" id="lower-timeline" ref="ltime" value="high school" onChange={this.handleChange}/>
           </div>
-          <div className="large-8 medium-8 small-8 columns" onBlur={this.handleChange}>
+          <div className="large-8 medium-8 small-8 columns">
             <div id="timeline-slider"></div>
           </div>
           <div className="large-2 medium-2 small-2 columns">
-            <span id="upper-timeline" ref="utime">present</span>
+            <input type="text" id="upper-timeline" ref="utime" value="present" onChange={this.handleChange}/>
           </div>
         </div>
       </div>
@@ -447,8 +508,10 @@ var SkillListings = React.createClass({
       );
     }.bind(this));
     return (
-      <div id="filters" className="large-6 medium-6 small-12 columns">
-        <div className="row"><b>Use the fields below to filter the results!</b></div>
+      <div id="filters" className="large-8 large-offset-2 medium-10 medium-offset-1 small-12 columns">
+        <div className="row">
+          <p>Filter my projects and work experience!</p>
+        </div>
         <TimelineFilter
           changeTime={this.props.changeTime}
           lowertime={this.props.lowertime}
@@ -504,25 +567,6 @@ var MainContent = React.createClass({
     return (
       <div id="filterable-content">
         <div className="row" id="about">
-          <div className="large-6 medium-6 small-12 columns bio">
-            <h2>Hi, I Am...</h2>
-            <p>
-              A <span className="highlight">senior</span> at &nbsp;
-              <span className="highlight">Georgia Institute of Technology</span>
-              &nbsp;with a <span className="highlight">3.68 GPA</span>
-              &nbsp;and 1 of 150 people in the <span className="highlight">Honors Program</span>.
-              I am pursuing a bachelors degree in <span className="highlight">Electrical Engineering</span>,
-              with a minor in Mandarin Chinese.
-              Through Georgia Tech, I have studied business-specific Mandarin Chinese
-              for eight weeks at Shanghai Jiaotong University,
-              and was 1 of 2 people selected to receive a stipend to intern
-              with the federal government in Washington DC. I have participated in
-              all kinds of hackathons including Bloomberg Code B, Google Games, HackGT, and Bitcamp!
-            </p>
-            <a href="documents/resume.pdf" id="download-resume" download>
-              <i className="fa fa-download" aria-hidden="true"></i> Download Resume
-            </a>
-          </div>
           <SkillListings skills={this.props.skills} tagState={tagState}
             lowertime={this.state.lowertime} uppertime={this.state.uppertime}
             toggleTag={this.toggleTag} changeTime={this.changeTime}/>

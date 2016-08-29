@@ -17,7 +17,7 @@ $(document).ready(function() {
   };
   var newPicture = function(byId) {
     var visible = $("#crane-banner img.is-visible");
-    var newlyVisible = picLookup[document.getElementById(byId).innerText];
+    var newlyVisible = picLookup[document.getElementById(byId).value];
     if (newlyVisible !== visible.id) {
       visible.removeClass("is-visible");
       visible.addClass("is-hidden");
@@ -42,12 +42,14 @@ $(document).ready(function() {
   	}
   });
   slider.noUiSlider.on('update', function( values, handle ) {
+    // Create a new 'change' event
+    var event = new Event('change');
     if ( !handle ) {
-  		document.getElementById("lower-timeline").innerText = lookup[parseInt(values[handle])];
-      $("#lower-timeline").trigger("change");
+  		document.getElementById("lower-timeline").value = lookup[parseInt(values[handle])];
+      document.getElementById("lower-timeline").dispatchEvent(event);
   	} else {
-  		document.getElementById("upper-timeline").innerText = lookup[parseInt(values[handle])];
-      $("#upper-timeline").trigger("change");
+  		document.getElementById("upper-timeline").value = lookup[parseInt(values[handle])];
+      document.getElementById("upper-timeline").dispatchEvent(event);
   	}
   });
 
