@@ -59,7 +59,7 @@
 	  frameworks: [],
 	  languages: ["java", "sql"],
 	  position: "Demand Creation Development Intern",
-	  accomplishments: ["Secured documents for upload/download and export with the correct confidential level", "Worked on development of internal sales tool for project portfolio management", "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"]
+	  accomplishments: ["Resolved high priority issues discovered in security audit related to classified internal documents", "Worked on development of internal sales tool for project portfolio management", "Helped on proof of concept Apache Spark product recommendations engine", "Discovered and fixed a security flaw that could be exploited to execute malicious SQL queries"]
 	}, {
 	  company: "Stackfolio LLC",
 	  startDate: new Date("May 16, 2015"),
@@ -68,7 +68,7 @@
 	  frameworks: ["django"],
 	  languages: ["python", "nosql"],
 	  position: "Full-stack Web Developer",
-	  accomplishments: ["Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages", "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform", "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time", "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server", "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business side of being in a startup"]
+	  accomplishments: ["Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages", "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform", "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time", "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server", "Fully automated FFIEC call report and UBPR data collection and created web portal to manage these processes", "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business aspects of startups"]
 	}, {
 	  company: "White House Council on Environmental Quality",
 	  startDate: new Date("January 12, 2015"),
@@ -116,7 +116,7 @@
 	    id: "publy-1",
 	    src: "images/publy.png"
 	  },
-	  about: "This web app display music, gender, age, and activity analytics about nearby bars through an API compatible with drivers license scanner and a Beaglebone sensor hub.",
+	  about: "This web app display music, gender, age, and activity analytics about nearby bars. Gender and age information come from an API compatible with existing driver's license scanners and music data comes from a custom Beaglebone sensor hub.",
 	  links: [{ "label": "View docs", "link": "https://e2e.ti.com/group/launchyourdesign/m/intern2016/666631" }, { "label": "View site", "link": "http://publydemo.nickfahrenkrog.me:8000/" }]
 	}, {
 	  name: "Babelboard",
@@ -214,14 +214,7 @@
 	  }
 	};
 
-	var timeLookup = {
-	  "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
-	  "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
-	  "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
-	  "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
-	};
-
-	var shouldDisplay = function shouldDisplay(proj, tagState, lowertime, uppertime) {
+	var shouldDisplay = function shouldDisplay(proj, tagState) {
 	  var hasFound = false;
 	  for (var property in tagState) {
 	    if (tagState.hasOwnProperty(property) && tagState[property]) {
@@ -229,15 +222,10 @@
 	    }
 	  }
 	  // If no tag selected, display all results
-	  if (!hasFound && lowertime === "high school" && uppertime === "present") {
+	  if (!hasFound) {
 	    return true;
 	  }
-	  if (proj.startDate < timeLookup[lowertime][0] || proj.endDate > timeLookup[uppertime][1]) {
 
-	    return false;
-	  } else if (!hasFound) {
-	    return true;
-	  }
 	  // Check if it has any of the skill types
 	  hasFound = false;
 	  proj.experiences.concat(proj.frameworks).concat(proj.languages).forEach(function (elem) {
@@ -390,13 +378,11 @@
 	    }
 
 	    var links = [];
-	    this.props.project.links.forEach(function (link) {
-	      links.push(React.createElement(
-	        'a',
-	        { href: link.link, className: 'button tiny', key: link.label },
-	        link.label
-	      ));
+	    /*
+	    this.props.project.links.forEach(function(link) {
+	      links.push(<a href={link.link} className="button tiny" key={link.label}>{link.label}</a>);
 	    });
+	    */
 
 	    // Render the project
 	    return React.createElement(
@@ -449,7 +435,7 @@
 	    this.props.projects.forEach(function (project) {
 	      rows.push(React.createElement(
 	        'div',
-	        { className: shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
+	        { className: shouldDisplay(project, this.props.tagState) ? "row project is-visible" : "row project is-hidden", key: project.img.id },
 	        React.createElement(ProjectBlurb, { project: project }),
 	        React.createElement(Screenshot, { project: project })
 	      ));
@@ -575,52 +561,13 @@
 	    var rows = [];
 	    var counter = 0;
 	    this.props.jobs.forEach(function (job) {
-	      rows.push(React.createElement(JobBlurb, { job: job, isVisible: shouldDisplay(job, this.props.tagState, this.props.lowertime, this.props.uppertime), key: counter }));
+	      rows.push(React.createElement(JobBlurb, { job: job, isVisible: shouldDisplay(job, this.props.tagState), key: counter }));
 	      counter++;
 	    }.bind(this));
 	    return React.createElement(
 	      'div',
 	      { id: 'jobs' },
 	      rows
-	    );
-	  }
-	});
-
-	var TimelineFilter = React.createClass({
-	  displayName: 'TimelineFilter',
-
-	  handleChange: function handleChange(event) {
-	    console.log("Sup");
-	    this.props.changeTime(this.refs.ltime.innerText, this.refs.utime.innerText);
-	  },
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'row filter-section timeline-section' },
-	      React.createElement(
-	        'p',
-	        null,
-	        'Timeline:'
-	      ),
-	      React.createElement(
-	        'div',
-	        { id: 'timeline-filter' },
-	        React.createElement(
-	          'div',
-	          { className: 'large-2 medium-2 small-2 columns' },
-	          React.createElement('input', { type: 'text', id: 'lower-timeline', ref: 'ltime', value: 'high school', onChange: this.handleChange })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'large-8 medium-8 small-8 columns' },
-	          React.createElement('div', { id: 'timeline-slider' })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'large-2 medium-2 small-2 columns' },
-	          React.createElement('input', { type: 'text', id: 'upper-timeline', ref: 'utime', value: 'present', onChange: this.handleChange })
-	        )
-	      )
 	    );
 	  }
 	});
@@ -663,11 +610,6 @@
 	          'Filter my projects and work experience!'
 	        )
 	      ),
-	      React.createElement(TimelineFilter, {
-	        changeTime: this.props.changeTime,
-	        lowertime: this.props.lowertime,
-	        uppertime: this.props.uppertime
-	      }),
 	      React.createElement(
 	        'div',
 	        { className: 'row filter-section' },
@@ -709,10 +651,7 @@
 	  displayName: 'MainContent',
 
 	  getInitialState: function getInitialState() {
-	    var out = {
-	      "lowertime": "high school",
-	      "uppertime": "present"
-	    };
+	    var out = {};
 	    this.props.skills.forEach(function (elem) {
 	      out[elem.id] = false;
 	    }.bind(this));
@@ -724,10 +663,6 @@
 	      out[tagName] = tagValue;
 	      return out;
 	    }.bind(this));
-	  },
-	  changeTime: function changeTime(ltime, utime) {
-	    this.setState({ "lowertime": ltime });
-	    this.setState({ "uppertime": utime });
 	  },
 	  render: function render() {
 	    var tagState = {};
@@ -741,13 +676,10 @@
 	        'div',
 	        { className: 'row', id: 'about' },
 	        React.createElement(SkillListings, { skills: this.props.skills, tagState: tagState,
-	          lowertime: this.state.lowertime, uppertime: this.state.uppertime,
-	          toggleTag: this.toggleTag, changeTime: this.changeTime })
+	          toggleTag: this.toggleTag })
 	      ),
-	      React.createElement(ProjectListings, { projects: this.props.projects, tagState: tagState,
-	        lowertime: this.state.lowertime, uppertime: this.state.uppertime }),
-	      React.createElement(JobListings, { jobs: this.props.jobs, tagState: tagState,
-	        lowertime: this.state.lowertime, uppertime: this.state.uppertime })
+	      React.createElement(ProjectListings, { projects: this.props.projects, tagState: tagState }),
+	      React.createElement(JobListings, { jobs: this.props.jobs, tagState: tagState })
 	    );
 	  }
 	});

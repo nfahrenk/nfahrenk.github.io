@@ -2,3 +2,4 @@ images/
 documents/
 node_modules/
 rsync_pass
+.DS_Store

@@ -25,9 +25,10 @@ var JOBS = [
     languages: ["java", "sql"],
     position: "Demand Creation Development Intern",
     accomplishments: [
-      "Secured documents for upload/download and export with the correct confidential level",
+      "Resolved high priority issues discovered in security audit related to classified internal documents",
       "Worked on development of internal sales tool for project portfolio management",
-      "Discovered and fixed a security flaw in an internal sales tool that was not caught in a recent security audit"
+      "Helped on proof of concept Apache Spark product recommendations engine",
+      "Discovered and fixed a security flaw that could be exploited to execute malicious SQL queries"
     ]
   },
   {
@@ -43,7 +44,8 @@ var JOBS = [
       "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform",
       "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time",
       "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server",
-      "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business side of being in a startup"
+      "Fully automated FFIEC call report and UBPR data collection and created web portal to manage these processes",
+      "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business aspects of startups"
     ]
   },
   {
@@ -110,7 +112,7 @@ var PROJECTS = [
       id: "publy-1",
       src: "images/publy.png"
     },
-    about: "This web app display music, gender, age, and activity analytics about nearby bars through an API compatible with drivers license scanner and a Beaglebone sensor hub.",
+    about: "This web app display music, gender, age, and activity analytics about nearby bars. Gender and age information come from an API compatible with existing driver's license scanners and music data comes from a custom Beaglebone sensor hub.",
     links: [
       {"label": "View docs", "link": "https://e2e.ti.com/group/launchyourdesign/m/intern2016/666631"},
       {"label": "View site", "link": "http://publydemo.nickfahrenkrog.me:8000/"},
@@ -221,14 +223,7 @@ var getFormattedDateRange = function(d1, d2) {
 
 }
 
-var timeLookup = {
-  "high school": [new Date("August 15, 2009"), new Date("August 14, 2013")],
-  "freshman": [new Date("August 15, 2013"), new Date("August 14, 2014")],
-  "sophomore": [new Date("August 15, 2014"), new Date("August 14, 2015")],
-  "present": [new Date("August 15, 2015"), new Date("August 14, 2017")]
-};
-
-var shouldDisplay = function(proj, tagState, lowertime, uppertime) {
+var shouldDisplay = function(proj, tagState) {
   var hasFound = false;
   for (var property in tagState) {
       if (tagState.hasOwnProperty(property) && tagState[property]) {
@@ -236,16 +231,10 @@ var shouldDisplay = function(proj, tagState, lowertime, uppertime) {
       }
   }
   // If no tag selected, display all results
-  if (!hasFound && lowertime === "high school" && uppertime === "present") {
+  if (!hasFound) {
     return true;
   }
-  if (proj.startDate < timeLookup[lowertime][0]
-    || proj.endDate > timeLookup[uppertime][1]) {
 
-    return false;
-  } else if (!hasFound) {
-    return true;
-  }
   // Check if it has any of the skill types
   hasFound = false;
   proj.experiences.concat(
@@ -340,9 +329,11 @@ var ProjectBlurb = React.createClass({
     }
 
     var links = [];
+    /*
     this.props.project.links.forEach(function(link) {
       links.push(<a href={link.link} className="button tiny" key={link.label}>{link.label}</a>);
     });
+    */
 
     // Render the project
     return (
@@ -372,7 +363,7 @@ var ProjectListings = React.createClass({
     var ndx = 0;
     this.props.projects.forEach(function(project) {
       rows.push(
-        <div className={shouldDisplay(project, this.props.tagState, this.props.lowertime, this.props.uppertime) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
+        <div className={shouldDisplay(project, this.props.tagState) ? "row project is-visible" : "row project is-hidden"} key={project.img.id}>
           <ProjectBlurb project={project} />
           <Screenshot project={project} />
         </div>
@@ -443,38 +434,10 @@ var JobListings = React.createClass({
     var rows = [];
     var counter = 0;
     this.props.jobs.forEach(function(job) {
-      rows.push(<JobBlurb job={job} isVisible={shouldDisplay(job, this.props.tagState, this.props.lowertime, this.props.uppertime)} key={counter}/>);
+      rows.push(<JobBlurb job={job} isVisible={shouldDisplay(job, this.props.tagState)} key={counter}/>);
       counter++;
     }.bind(this));
     return (<div id="jobs">{rows}</div>);
-  }
-});
-
-var TimelineFilter = React.createClass({
-  handleChange: function(event) {
-    console.log("Sup");
-    this.props.changeTime(
-      this.refs.ltime.innerText,
-      this.refs.utime.innerText
-    );
-  },
-  render: function() {
-    return (
-      <div className="row filter-section timeline-section">
-        <p>Timeline:</p>
-        <div id="timeline-filter">
-          <div className="large-2 medium-2 small-2 columns">
-            <input type="text" id="lower-timeline" ref="ltime" value="high school" onChange={this.handleChange}/>
-          </div>
-          <div className="large-8 medium-8 small-8 columns">
-            <div id="timeline-slider"></div>
-          </div>
-          <div className="large-2 medium-2 small-2 columns">
-            <input type="text" id="upper-timeline" ref="utime" value="present" onChange={this.handleChange}/>
-          </div>
-        </div>
-      </div>
-    );
   }
 });
 
@@ -512,11 +475,6 @@ var SkillListings = React.createClass({
         <div className="row">
           <p>Filter my projects and work experience!</p>
         </div>
-        <TimelineFilter
-          changeTime={this.props.changeTime}
-          lowertime={this.props.lowertime}
-          uppertime={this.props.uppertime}
-        />
         <div className="row filter-section">
           <p>Experience:</p>
           {tagLinks.experience}
@@ -539,10 +497,7 @@ var SkillListings = React.createClass({
 
 var MainContent = React.createClass({
   getInitialState: function() {
-    var out = {
-      "lowertime": "high school",
-      "uppertime": "present"
-    };
+    var out = {};
     this.props.skills.forEach(function(elem) {
       out[elem.id] = false;
     }.bind(this));
@@ -555,10 +510,6 @@ var MainContent = React.createClass({
       return out;
     }.bind(this));
   },
-  changeTime: function(ltime, utime) {
-    this.setState({"lowertime": ltime});
-    this.setState({"uppertime": utime});
-  },
   render: function() {
     var tagState = {};
     this.props.skills.forEach(function(elem) {
@@ -568,13 +519,10 @@ var MainContent = React.createClass({
       <div id="filterable-content">
         <div className="row" id="about">
           <SkillListings skills={this.props.skills} tagState={tagState}
-            lowertime={this.state.lowertime} uppertime={this.state.uppertime}
-            toggleTag={this.toggleTag} changeTime={this.changeTime}/>
+            toggleTag={this.toggleTag} />
         </div>
-        <ProjectListings projects={this.props.projects} tagState={tagState}
-          lowertime={this.state.lowertime} uppertime={this.state.uppertime} />
-        <JobListings jobs={this.props.jobs} tagState={tagState}
-          lowertime={this.state.lowertime} uppertime={this.state.uppertime} />
+        <ProjectListings projects={this.props.projects} tagState={tagState}/>
+        <JobListings jobs={this.props.jobs} tagState={tagState}/>
       </div>
     );
   }
