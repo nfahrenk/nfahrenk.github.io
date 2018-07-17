@@ -4,18 +4,66 @@ var ReactDOM = require('react-dom');
 var SKILLS = [
   { type: "experience", name: "Web Development", id: "webdev" },
   { type: "experience", name: "App Development", id: "appdev" },
+  { type: "experience", name: "Hardware", id: "hardware" },
   { type: "experience", name: "Data Science", id: "datascience" },
   { type: "framework", name: "Django", id: "django" },
+  { type: "framework", name: "AWS Lambda", id: "lambda" },
   { type: "language", name: "Python", id: "python" },
   { type: "language", name: "Swift", id: "swift" },
   { type: "language", name: "SQL", id: "sql" },
-  { type: "language", name: "NoSQL", id: "nosql" },
+  { type: "language", name: "MongoDB", id: "mongodb" },
+  { type: "language", name: "DynamoDB", id: "dynamodb" },
   { type: "language", name: "R", id: "rlang" },
   { type: "language", name: "Java", id: "java" },
   { type: "language", name: "Matlab", id: "matlab" }
 ];
 
 var JOBS = [
+  {
+    company: "Yelp",
+    startDate: new Date("August 11, 2017"),
+    endDate: new Date("July 17, 2018"),
+    experiences: ["webdev"],
+    frameworks: [],
+    languages: ["java", "sql"],
+    position: "Part-time Software Engineer",
+    accomplishments: [
+      "Wrote highly performant database triggers for screenshotting data and field assignment",
+      "Coded batches that process tens of thousands of records daily"
+    ]
+  },
+  {
+    company: "Yelp",
+    startDate: new Date("May 22, 2017"),
+    endDate: new Date("August 11, 2017"),
+    experiences: ["webdev"],
+    frameworks: [],
+    languages: ["java", "sql"],
+    position: "Software Engineering Intern",
+    accomplishments: [
+      "Rewrote external API client from scratch which reduced the time to get results for a single day from 1 minute 55 seconds to 3 seconds and the number of calls from 3 + 3 * N to 4 (where N is the number of results, usually in the order of tens)",
+      "Completely redesigned two web pages: one for registering advertisers for orientation, the other for displaying orientation information including who attended, questions each person asked, and responses to surveys",
+      "Proposed and implemented complete automation of importing data from external source, which previously required some manual interaction daily"
+    ]
+  },
+  {
+    company: "Stackfolio LLC",
+    startDate: new Date("May 16, 2015"),
+    endDate: new Date("December 1, 2016"),
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "mongodb"],
+    position: "Full-stack Web Developer",
+    accomplishments: [
+      "Developed marketplace in Django for banks to buy and sell loan packages mirroring the process facilitated by brokerage firms",
+      "Optimized data portal which lead to an 80% improvement in load time",
+      "Implemented group chat and notification system for progression through transaction process on a Python/Twisted server",
+      "Fully automated FFIEC call report and UBPR data collection and created web portal to manage these processes",
+      "Engaged with seasoned entrepreneurs from Tech Square Labs (a Google for Entrepreneurs incubator) on business strategy",
+      "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform"
+
+    ]
+  },
   {
     company: "Texas Instruments",
     startDate: new Date("May 31, 2016"),
@@ -32,23 +80,6 @@ var JOBS = [
     ]
   },
   {
-    company: "Stackfolio LLC",
-    startDate: new Date("May 16, 2015"),
-    endDate: new Date("May 29, 2016"),
-    experiences: ["webdev"],
-    frameworks: ["django"],
-    languages: ["python", "nosql"],
-    position: "Full-stack Web Developer",
-    accomplishments: [
-      "Developed a marketplace and transaction platform mirroring that facilitated by brokerage firms for banks to buy and sell loan packages",
-      "Integrated Docusign API to handle non-disclosure and transaction agreements on the platform",
-      "Rewrote UBPR data portal from scratch which lead to an 80% improvement in load time",
-      "Implemented group chat and notification system for progression through the transaction process on a Python/Twisted server",
-      "Fully automated FFIEC call report and UBPR data collection and created web portal to manage these processes",
-      "Mentored by Tech Square Labs (a Google for Entrepreneurs incubator) on the business aspects of startups"
-    ]
-  },
-  {
     company: "White House Council on Environmental Quality",
     startDate: new Date("January 12, 2015"),
     endDate: new Date("May 01, 2015"),
@@ -57,10 +88,12 @@ var JOBS = [
     languages: ["rlang"],
     position: "Data Analyst Intern",
     accomplishments: [
-      "Performed data analysis in R that found that the original targets of Executive Order 13693 were not ambitious enough to meet its mission and helped rework the document to include more appropriate targets",
-      "Developed data forecasts used in presentations with federal agencies to support why the targets were selected",
-      "Automated the process of converting excel documents submitted by government agencies into that needed by OMB MAX Analytics",
-      "Orchestrated and engaged in meetings between managers of government agencies and myself"
+      "Performed data analysis in R that found that the original targets of Executive Order 13693 (which was signed by President Obama) were not ambitious enough to meet its mission",
+      "Suggested more appropriate targets to be used on the Executive Order",
+      "Helped write a section of the Executive Order’s implementing instructions on the mathematical basis for the proposed reductions",
+      "Developed data forecasts for use by CEQ leadership to make the case for change across federal agencies",
+      "Automated the process of converting Excel-based documents government agency submissions into the format needed by online tool",
+      "Orchestrated meetings with managers of transportation-focused teams inside the federal government to explore the feasibility of the reductions proposed in the executive order and to focus on new legislation from having an increased number of electric vehicles"
     ],
     extra: {
       text: "Check out the Executive Order!",
@@ -68,36 +101,56 @@ var JOBS = [
     }
   },
   {
-    company: "Georgia Institute of Technology",
+    company: "CS 1371 Computing for Engineers (Matlab)",
     startDate: new Date("January 06, 2014"),
     endDate: new Date("December 12, 2014"),
     experiences: [],
     frameworks: [],
     languages: ["matlab"],
-    position: "CS 1371 (Matlab) Teacher's Assistant",
+    position: "Teacher's Assistant",
     accomplishments: [
-      "Planned and taught undergraduate engineers a 90-minute recitation each week",
-      "Wrote, proctored, and graded students’ examinations",
-      "Held office hours to help students with homework and the material taught in class"
-    ]
-  },
-  {
-    company: "Northfield Trading Company",
-    startDate: new Date("February 06, 2012"),
-    endDate: new Date("August 09, 2013"),
-    experiences: ["datascience"],
-    frameworks: [],
-    languages: ["java", "rlang", "sql"],
-    position: "Software Engineer",
-    accomplishments: [
-      "Processed natural language baseball play-by-play information in Java and stored the results in a MySQL database",
-      "Used Java to predict the outcome of baseball games by setting up a monte carlo simulation weighted by a genetic algorithm to anticipate the progression of plays",
-      "Developed model in R using metrics from collaboration with a sabermetrician"
+      "Planned and taught undergraduate engineers a 90-minute recitation weekly",
+      "Wrote, proctored, and graded students’ examinations every three weeks",
+      "Hosted weekly office hours to help students with homework and the material taught in class"
     ]
   }
 ]
 
 var PROJECTS = [
+  {
+    name: "Aquasource",
+    startDate: new Date("Oct 21, 2016"),
+    endDate: new Date("Oct 23, 2016"),
+    type: "mobile",
+    experiences: ["appdev", "hardware"],
+    frameworks: ["lambda"],
+    languages: ["swift", "dynamodb"],
+    wonAward: true,
+    description: "Overall 1st place from HackGSU and best hack from Mapquest.",
+    img: {
+      id: "aquasource-1",
+      src: "images/aquasource.png"
+    },
+    about: "This iPhone app lets users crowd-source water quality data on a map by interacting with a cheap spectrometer (constructed out of a phone + $10 of materials) that identifies the presence of contaminants in water sources.",
+    links: []
+  },
+  {
+    name: "WingIt",
+    startDate: new Date("Sept 23, 2016"),
+    endDate: new Date("Sept 25, 2016"),
+    type: "webapp",
+    experiences: ["webdev"],
+    frameworks: ["django"],
+    languages: ["python", "sql"],
+    wonAward: true,
+    description: "Won \"That’s So Cash Award of Awesomeness\" from HBK.",
+    img: {
+      id: "wingit-1",
+      src: "images/wingit.png"
+    },
+    about: "This web app optimally seats people based on LinkedIn or unique shared Facebook likes and a service that analyzes twitter to determine a person’s mood to recommend an in-flight movie.",
+    links: []
+  },
   {
     name: "Publy",
     startDate: new Date("June 19, 2016"),
@@ -115,7 +168,6 @@ var PROJECTS = [
     about: "This web app display music, gender, age, and activity analytics about nearby bars. Gender and age information come from an API compatible with existing driver's license scanners and music data comes from a custom Beaglebone sensor hub.",
     links: [
       {"label": "View docs", "link": "https://e2e.ti.com/group/launchyourdesign/m/intern2016/666631"},
-      {"label": "View site", "link": "http://publydemo.nickfahrenkrog.me:8000/"},
     ]
   },
   {
@@ -150,23 +202,6 @@ var PROJECTS = [
       src: "images/beheard.jpg"
     },
     about: "This webapp quantifies the number of positive, negative, and neutral tweets regarding active bills in congress. Once a certain threshold of activity is met, the app reaches out to the appropriate congress member on behalf of the constituents to set up a live forum.",
-    links: []
-  },
-  {
-    name: "Fly with Friends",
-    startDate: new Date("September 25, 2015"),
-    endDate: new Date("September 27, 2015"),
-    type: "webapp",
-    experiences: ["webdev"],
-    frameworks: ["django"],
-    languages: ["python", "sql"],
-    wonAward: false,
-    description: "Entered into HackGT.",
-    img: {
-      id: "flywithfriends-1",
-      src: "images/flywithfriends.png"
-    },
-    about: "This webapp analyzes your Facebook profile information (including likes, events, and about) to optimally seat people on a plane. An hour before the flight, you are notified of a unique interest shared between you and the person seated next to you.",
     links: []
   },
   {
